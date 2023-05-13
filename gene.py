@@ -17,6 +17,8 @@ class Dna:
 
     def get_sequence(self):
         return self.sequence
+    def check_sequence(self):
+        pass
 
 
 
