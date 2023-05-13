@@ -5,9 +5,18 @@
 class Dna:
     def __init__(self, sequence):
         self.sequence = sequence
-    pass
-    def get_sequence():
-        pass
+    
+    def add_sequence():
+        try:
+            addSeq = input("what is your sequence: ")
+            x =Dna(addSeq)
+            print(Dna.get_sequence(x))
+        except ValueError:
+            print("YOU DIDN'T TYPE ANYTHING!!!!")
+
+
+    def get_sequence(self):
+        return self.sequence
 
 
 
