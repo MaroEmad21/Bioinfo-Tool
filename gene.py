@@ -3,13 +3,13 @@
 
 # the sequence object that contain all nucleotide
 class Dna:
-    seq=[]
-    def get_sequence():
-        pass
-
     def __init__(self, sequence):
         self.sequence = sequence
     pass
+    def get_sequence():
+        pass
+
+
 
 
 
