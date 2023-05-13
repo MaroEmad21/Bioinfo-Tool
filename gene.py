@@ -11,8 +11,9 @@ class Dna:
         try:
             addSeq = input("what is your sequence: ")
             seq =Dna(addSeq)
-            return Dna.get_sequence(seq)
-        except None:
+            Dna.get_sequence(seq)
+            
+        except ValueError:
             print("YOU DIDN'T TYPE ANYTHING!!!!")
 
     # function that returns the sequence for testing
@@ -20,19 +21,30 @@ class Dna:
         seq = self.sequence
         #sequnce must be in upper case
         if seq:
-            return seq.upper()
+            print (seq.upper())
         else:
-            return seq
+            print("error")
+        
+        print( Dna.check_sequence(seq))
+        
     # a funcrion that check the sequence to see if it's correct or not (not random typing)
     def check_sequence(self):
-        pass
+        seq= self.sequence
+        seq_list=[]
+        seq_list.append(seq)
+        for nucleotide in seq_list:
+            if nucleotide == "A" or nucleotide == "C" or nucleotide == "G" or nucleotide == "T":
+                print("that's correct")
+            else:
+                print("something is wrong")
+        
 
 
 
 
 
 class Gene(Dna):
-    def recog_promoter():
+    def check_promoter():
         pass
     def add_promoter():
         pass
