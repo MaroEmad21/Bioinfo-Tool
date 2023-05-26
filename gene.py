@@ -1,5 +1,6 @@
 # making a program that makes gene 
 import collections
+from utilities import *
 
 # first of all we make a class that conatin the meaning of gene 
 # the sequence object that contain all nucleotides
@@ -36,9 +37,9 @@ class Dna:
             if nucleotide in Nucleotides:
                 pass
             else:
-                print(f"that's not correct the nucleotide {nucleotide} is wrong")
+                print(f"that's not correct the nucleotide {colored(nucleotide)} is wrong")
                 quit()
-        print(f"sequence is [{self}] and the length is {len(self)} bp")
+        print(f"sequence is [{self}] ")#and the length is {len(self)} bp")
 
 
     # a function to count the frequency of each nucleotide
@@ -51,6 +52,9 @@ class Dna:
     def transcription(seq):
 
          return seq.replace("T","U")     
+    # in many cases you need to get the GC content 
+    def gc_content(seq):
+        return round((seq.count('C') + seq.count('G')  / len(seq)*100 )) 
 
 
 

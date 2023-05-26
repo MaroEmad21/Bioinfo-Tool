@@ -7,16 +7,15 @@ from gene import *
 import random
 
 
-
 randomStr=''.join([random.choice(Nucleotides)
-                   for nuc in range(20)])
+                   for nuc in range(50)])
 # AS I WILL USE THIS MAIN FUCTION TO BE THE MODERATOR OF ALL FUNCTIONS ANDD TO RUN ALL OPERTAIONS NEEDED
 def main():
-    print(Dna.add_sequence(randomStr))
+    """print(Dna.add_sequence(randomStr))
     print(Dna.NucFreq(randomStr))
     print(Dna.transcription(randomStr))    
-            
-
+    """
+    print(f"The GC Content is {Dna.gc_content(randomStr)}%")
 
 
 main()            
