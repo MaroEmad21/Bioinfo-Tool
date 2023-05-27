@@ -1,7 +1,8 @@
 # making a program that makes gene 
 import collections
 from utilities import *
-
+from Dict import  *
+from Bio import SeqIO 
 # first of all we make a class that conatin the meaning of gene 
 # the sequence object that contain all nucleotides
 
