@@ -16,16 +16,17 @@ def main():
         if parse_or_seq.lower() == "file":
             file_path= input("file path: ")
             file_type= input("file type: ")
-            seq_rec = SeqIO.parse(file_path, file_type)
-            print(Seq(repr(seq_rec.seq)))
+            for record in SeqIO.parse(file_path, file_type):
+                seq = record.seq
+                print(f"your sequence is: {seq}")
         elif parse_or_seq.lower() == "seq":
             sequence = randomStr
             seq = Seq(sequence)
             print(f"sequence is: {seq}")
-            next_step = input("what's next: ")
-            if next_step.lower() == 'transcribe':
+        next_step = input("what's next: ")
+        if next_step.lower() == 'transcribe':
                 print(f"m-RNA is: {seq.transcribe()}")
-            else: 
+        else: 
                 print(" no choice")    
     else:
         pass    
