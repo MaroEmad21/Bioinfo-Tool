@@ -15,13 +15,13 @@ answer = input('which sequece you will type?\n ' + "(dna or 1)  ")
 
 if answer.upper() in ["DNA","1"]:
     parse_or_seq = input("file or seq: ")
-    if parse_or_seq.lower() == "file":
+    if parse_or_seq.lower() in ["file","1"]:
         file_path= input("file path: ")
         file_type= input("file type: ")
         for record in SeqIO.parse(file_path, file_type):
             seq = record.seq
             print(f"id = {record.description} \n your sequence is: {seq}")
-    elif parse_or_seq.lower() == "seq":
+    elif parse_or_seq.lower() in ["seq","2"]:
         sequence = randomStr
         seq = Seq(sequence)
         print(f"sequence is: {seq}")
@@ -39,36 +39,31 @@ if answer.upper() in ["DNA","1"]:
     __stop or x:  """)
         if next_step.lower() in  ['transcribe' ,'1']:
             print(f"m-RNA is: {seq.transcribe()}")
-            seq=seq.transcribe()
-            records= SeqRecord(seq,id='',name='transcribe',description=f'{record.description}')
+            records= SeqRecord(seq.transcribe(),id='',name='transcribe',description=f'{record.description}')
             name = input("name of file:")
             with open(name +".fasta", "w") as handle:
                 SeqIO.write(records, handle, "fasta")
         elif next_step.lower() in ['translate','2']:
                 print(f"Amino acid seq: {seq.translate()}") 
-                seq=seq.translate()
-                records= SeqRecord(seq,id='',name='translate',description=f'{record.description}')
+                records= SeqRecord(seq.translate(),id='',name='translate',description=f'{record.description}')
                 name = input("name of file:")
                 with open(name +".fasta", "w") as handle:
                    SeqIO.write(records, handle, "fasta")
         elif   next_step.lower() in ['comp','3'] :
                 print(f"complement seq: {seq.complement()}")
-                seq=seq.complement()
-                records= SeqRecord(seq,id='',name='complementary sequence',description='complementary sequence')
+                records= SeqRecord(seq.complement(),id='',name='complementary sequence',description=f'{record.description}')
                 name = input("name of file:")
                 with open(name +".fasta", "w") as handle:
                    SeqIO.write(records, handle, "fasta")   
         elif next_step.lower() in ['rev-comp','4']:
             print(f"{seq.reverse_complement()}")
-            seq=seq.reverse_complement()
-            records= SeqRecord(seq,id='',name='reverse complementary sequence',description='reverse complementary sequence')
+            records= SeqRecord(seq.reverse_complement(),id='',name='reverse complementary sequence',description=f'{record.description}')
             name = input("name of file:")
             with open(name +".fasta", "w") as handle:
                    SeqIO.write(records, handle, "fasta") 
         elif next_step.lower() in ['comp_rna','5']:
-            seq=seq.complement_rna()
-            print(f"complment rna:{seq}")   
-            records= SeqRecord(seq,id='',name='reverse complementary_rna sequence',description='reverse complementary_rna sequence')
+            print(f"complment rna:{seq.complement_rna()}")   
+            records= SeqRecord(seq.complement_rna(),id='',name='reverse complementary_rna sequence',description=f'{record.description}')
             name = input("name of file:")
             with open(name +".fasta", "w") as handle:
                 SeqIO.write(records, handle, "fasta")
@@ -77,11 +72,10 @@ if answer.upper() in ["DNA","1"]:
         elif next_step.lower() in ['mw', '7']:
             print(f'Moleceular weight: {molecular_weight(seq)}')
         elif next_step.lower() in ['sixframe', '8']:
-            seq = six_frame_translations(seq) 
-            print(f'{seq}')     
+            print(f'{six_frame_translations(seq) }')     
             name = input("name of file:")
             test = open(name+".txt",'w')
-            test.write(str(seq))
+            test.write(str(six_frame_translations(seq) ))
             test.close()
         elif next_step.lower() in  ['stop' ,'x']:
             break
