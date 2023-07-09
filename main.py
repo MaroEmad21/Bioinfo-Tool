@@ -3,6 +3,8 @@ from Bio import SeqIO
 from Bio.Seq import Seq 
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
+from Bio.Graphics import *
+
 Nucleotides= ["A","C","G","T"]
 
 randomStr=''.join([random.choice(Nucleotides)
@@ -77,6 +79,8 @@ if answer.upper() in ["DNA","1"]:
             test = open(name+".txt",'w')
             test.write(str(six_frame_translations(seq) ))
             test.close()
+        elif next_step.lower() in ['9']:
+            print(f'skew GC: {GC_skew(seq)}')
         elif next_step.lower() in  ['stop' ,'x']:
             break
 else:
