@@ -3,7 +3,7 @@ from Bio import SeqIO
 from Bio.Seq import Seq 
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
-from Bio.Graphics import *
+from funcs import *
 
 Nucleotides= ["A","C","G","T"]
 
@@ -13,20 +13,24 @@ randomStr=''.join([random.choice(Nucleotides)
 
 
 
-answer = input('which sequece you will type?\n ' + "(dna or 1)  ")
+answer = input( 
+               """which sequece you will type?
+(dna or 1)  """)
 
 if answer.upper() in ["DNA","1"]:
     parse_or_seq = input("file or seq: ")
     if parse_or_seq.lower() in ["file","1"]:
-        file_path= input("file path: ")
-        file_type= input("file type: ")
-        for record in SeqIO.parse(file_path, file_type):
+        #file_path= input("file path: ")
+        #file_type= input("file type: ")
+        for record in SeqIO.parse("sequence.fasta", "fasta"):
             seq = record.seq
             print(f"id = {record.description} \n your sequence is: {seq}")
     elif parse_or_seq.lower() in ["seq","2"]:
         sequence = randomStr
         seq = Seq(sequence)
         print(f"sequence is: {seq}")
+    else:
+        print("Choose well")    
     while True:
         next_step = input(
     """what's next: 
@@ -38,6 +42,7 @@ if answer.upper() in ["DNA","1"]:
     6)GC content(%) 
     7)Molecular weight(mw)
     8)six frame translation
+    9)Alignment
     __stop or x:  """)
         if next_step.lower() in  ['transcribe' ,'1']:
             print(f"m-RNA is: {seq.transcribe()}")
@@ -79,8 +84,8 @@ if answer.upper() in ["DNA","1"]:
             test = open(name+".txt",'w')
             test.write(str(six_frame_translations(seq) ))
             test.close()
-        elif next_step.lower() in ['9']:
-            print(f'skew GC: {GC_skew(seq)}')
+        elif next_step.lower() in ['al', '9']:
+            make_alignment(seq)
         elif next_step.lower() in  ['stop' ,'x']:
             break
 else:
