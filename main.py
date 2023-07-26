@@ -2,7 +2,7 @@
     importing  libraries needed to do the tool
     this is a simple software that could help you to get better info  and data 
     that could be used In Bioinformatics
-    this is Version 1.0 
+    this is Version 1.0  
 """
 import random 
 from Bio import SeqIO 
