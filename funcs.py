@@ -4,10 +4,15 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
 from Bio.Align import PairwiseAlignment, MultipleSeqAlignment , PairwiseAligner
 import os
+from Bio.Phylo import BaseTree , Consensus
 
+
+# function that makes alignment and saves it in a clustal file
+# NOTE!!! you should put all files to be aligned in one folder
 def make_alignment(sequence1):
     Q1= int(input("how many sequences? "))
     if Q1 == 2:
+        # pairwise alignment
         aligner = PairwiseAligner()
         Q2 = input("mode (Global or local)")
         if Q2.lower() == 'global':
@@ -37,7 +42,8 @@ def make_alignment(sequence1):
             for record in SeqIO.parse(file_path, file_type):
                 sequenceB = record.seq
             alignment=aligner.align(sequenceA,sequenceB)
-            print(alignment[0])            
+            print(alignment[0])
+    # Multiple sequence alignment (MSA)                    
     elif Q1 >= 3:
             import glob
             path=input("path of files: ")
