@@ -9,7 +9,7 @@ from Bio import SeqIO
 from Bio.Seq import Seq 
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
-from funcs import * # to use functions made that not exist in Biopython
+from funcs import *   # to use functions made that not exist in Biopython
 
 Nucleotides= ["A","C","G","T"]
 # this is used as debugger to  the tool
@@ -28,9 +28,9 @@ if answer.upper() in ["DNA","1"]:
     """user enters file path and file type manually but used once
                     (will be updated)""" 
     if parse_or_seq.lower() in ["file","1"]:
-        file_path= input("file name: ")
-        file_type= input("file type: ")
-        for record in SeqIO.parse(f"{file_path}", file_type):
+        #file_path= input("file name: ")
+        #file_type= input("file type: ")
+        for record in SeqIO.parse(f"sequence.fasta", "fasta"):
             seq = record.seq
             print(f"id = {record.description} \n your sequence is: {seq}")
     # the second choice will be removed later
@@ -53,6 +53,7 @@ if answer.upper() in ["DNA","1"]:
     7)Molecular weight(mw)
     8)six frame translation
     9)Alignment
+    10)phylognetic tree
     __stop or x:  """)
         # transcription
         if next_step.lower() in  ['transcribe' ,'1']:
@@ -105,7 +106,9 @@ if answer.upper() in ["DNA","1"]:
         # making alignment    
         elif next_step.lower() in ['al', '9']:
             make_alignment(seq)
-        # to break the loop    
+        elif next_step.lower() in ['phylo', '10']:
+            make_phylo(seq) 
+        # to break the loop   
         elif next_step.lower() in  ['stop' ,'x']:
             break
 else:
