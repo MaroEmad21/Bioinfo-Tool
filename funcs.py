@@ -55,7 +55,7 @@ def make_alignment(seq):
                 seqs=[]
                 file_path= input("file name: ")
                 file_type= input("file type: ")
-                for record in SeqIO.parse(f"{file_path}", {file_type}):
+                for records in SeqIO.parse(f"{file_path}", f"{file_type}"):
                     seqs.append(SeqRecord(records.seq,records.id))
                 align= MultipleSeqAlignment(seqs)
                 name = input("name of file:")
@@ -99,7 +99,6 @@ def make_phylo(seq,ids):
             # Calculate the distance matrix
             calculator = DistanceCalculator('identity')
             distMatrix = calculator.get_distance(align)
-            print(distMatrix)
             # Create a DistanceTreeConstructor object
             constructor = DistanceTreeConstructor()
             # Construct the phlyogenetic tree using UPGMA algorithm
@@ -150,7 +149,6 @@ def make_phylo(seq,ids):
             # Calculate the distance matrix
             calculator = DistanceCalculator('identity')
             distMatrix = calculator.get_distance(align)
-            print(distMatrix)
             # Create a DistanceTreeConstructor object
             constructor = DistanceTreeConstructor()
             # Construct the phlyogenetic tree using UPGMA algorithm
