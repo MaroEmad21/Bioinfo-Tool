@@ -3,8 +3,6 @@ this file will contain all functions needed to be made for the tool that
 doesn't exist in libraries
 """
 
-
-
 from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
 from Bio import   SeqIO  ,Phylo
 from Bio.SeqRecord import SeqRecord
@@ -52,20 +50,32 @@ def make_alignment(seq):
     # Multiple sequence alignment (MSA)     
     # remember to put all needed files in one folder               
     elif Q1 >= 3:
-            path=input("path of files: ")
-            files = []
-            seqs=[]
-            for file in glob.glob(f"{path}"+"\*.fasta"):
-                files.append(file)
-            for i in files:
-                for records in  SeqIO.parse(f"{i}","fasta"):
+            Q5 = input("File or Folder (1 or 2) ")
+            if Q5 == "1":
+                seqs=[]
+                file_path= input("file name: ")
+                file_type= input("file type: ")
+                for record in SeqIO.parse(f"{file_path}", {file_type}):
                     seqs.append(SeqRecord(records.seq,records.id))
-            align= MultipleSeqAlignment(seqs)
-            name = input("name of file:")
-            with open(name +".aln", "w") as handle:
-                SeqIO.write(align, handle, "clustal")
-
-
+                align= MultipleSeqAlignment(seqs)
+                name = input("name of file:")
+                with open(name +".aln", "w") as handle:
+                    SeqIO.write(align, handle, "clustal")
+            elif Q5 == "2":
+                path=input("path of files: ")
+                files = []
+                seqs=[]
+                for file in glob.glob(f"{path}"+"\*.fasta"):
+                    files.append(file)
+                for i in files:
+                    for records in  SeqIO.parse(f"{i}","fasta"):
+                        seqs.append(SeqRecord(records.seq,records.id))
+                align= MultipleSeqAlignment(seqs)
+                name = input("name of file:")
+                with open(name +".aln", "w") as handle:
+                    SeqIO.write(align, handle, "clustal")
+            else:    
+                print("WRONG!!!!")
 
 
 
@@ -74,22 +84,17 @@ def make_alignment(seq):
 
 
 
-def make_phylo(seq):
-    info = input("do you want to include your sequence? (y or n)")
+def make_phylo(seq,ids):
+    info = input("do you want to include your sequence? (y or n) ")
     if info == "y":
-        print("you choosed yes")
-    elif info == "n":
-            """
-                it takes files in folder and makes a phylo tree 
-            """
-            path=input("path of files: ")
-            files = []
+        info2 = input("File or Folder? (1 or 2) ")
+        if info2 == "1":
             seqs=[]
-            for file in glob.glob(f"{path}"+"\*.fasta"):
-                files.append(file)
-            for i in files:
-                for records in  SeqIO.parse(f"{i}","fasta"):
-                    seqs.append(SeqRecord(records.seq,records.id))
+            file_path= input("file name: ")
+            file_type= input("file type: ")
+            for records in SeqIO.parse(f"{file_path}", f"{file_type}"):
+                seqs.append(SeqRecord(records.seq,records.id))
+            seqs.append(SeqRecord(seq,ids))
             align= MultipleSeqAlignment(seqs)
             # Calculate the distance matrix
             calculator = DistanceCalculator('identity')
@@ -105,10 +110,86 @@ def make_phylo(seq):
             Phylo.draw(UPGMATree)
             # Draw the phlyogenetic tree using terminal
             Phylo.draw_ascii(NJTree)
-
-    
-    
-    
+        elif info2 == "2":
+            """
+                it takes files in folder and makes a phylo tree 
+            """
+            path=input("path of files: ")
+            files = []
+            seqs=[]
+            for file in glob.glob(f"{path}"+"\*.fasta"):
+                files.append(file)
+            for i in files:
+                for records in  SeqIO.parse(f"{i}","fasta"):
+                    seqs.append(SeqRecord(records.seq,records.id))
+            seqs.append(SeqRecord(seq,ids))
+            align= MultipleSeqAlignment(seqs)
+            # Calculate the distance matrix
+            calculator = DistanceCalculator('identity')
+            distMatrix = calculator.get_distance(align)
+            # Create a DistanceTreeConstructor object
+            constructor = DistanceTreeConstructor()
+            # Construct the phlyogenetic tree using UPGMA algorithm
+            UPGMATree = constructor.upgma(distMatrix)
+            # Construct the phlyogenetic tree using NJ algorithm
+            NJTree = constructor.nj(distMatrix)
+            # Draw the phlyogenetic tree
+            Phylo.draw(UPGMATree)
+            # Draw the phlyogenetic tree using terminal
+            Phylo.draw_ascii(NJTree)
+            raise ValueError("try again")
+    elif info == "n":
+        info2 = input("File or Folder? (1 or 2) ")
+        if info2 == "1":
+            seqs=[]
+            file_path= input("file name: ")
+            file_type= input("file type: ")
+            for records in SeqIO.parse(f"{file_path}", f"{file_type}"):
+                seqs.append(SeqRecord(records.seq,records.id))
+            align= MultipleSeqAlignment(seqs)
+            # Calculate the distance matrix
+            calculator = DistanceCalculator('identity')
+            distMatrix = calculator.get_distance(align)
+            print(distMatrix)
+            # Create a DistanceTreeConstructor object
+            constructor = DistanceTreeConstructor()
+            # Construct the phlyogenetic tree using UPGMA algorithm
+            UPGMATree = constructor.upgma(distMatrix)
+            # Construct the phlyogenetic tree using NJ algorithm
+            NJTree = constructor.nj(distMatrix)
+            # Draw the phlyogenetic tree
+            Phylo.draw(UPGMATree)
+            # Draw the phlyogenetic tree using terminal
+            Phylo.draw_ascii(NJTree)
+        elif info2 == "2":
+            """
+                it takes files in folder and makes a phylo tree 
+            """
+            path=input("path of files: ")
+            files = []
+            seqs=[]
+            for file in glob.glob(f"{path}"+"\*.fasta"):
+                files.append(file)
+            for i in files:
+                for records in  SeqIO.parse(f"{i}","fasta"):
+                    seqs.append(SeqRecord(records.seq,records.id))
+            align= MultipleSeqAlignment(seqs)
+            # Calculate the distance matrix
+            calculator = DistanceCalculator('identity')
+            distMatrix = calculator.get_distance(align)
+            # Create a DistanceTreeConstructor object
+            constructor = DistanceTreeConstructor()
+            # Construct the phlyogenetic tree using UPGMA algorithm
+            UPGMATree = constructor.upgma(distMatrix)
+            # Construct the phlyogenetic tree using NJ algorithm
+            NJTree = constructor.nj(distMatrix)
+            # Draw the phlyogenetic tree
+            Phylo.draw(UPGMATree)
+            # Draw the phlyogenetic tree using terminal
+            Phylo.draw_ascii(NJTree)
+            raise ValueError("try again!!")
+        else:
+            print("wrong choice")
     else:
         print("choose well!!!!!")
 

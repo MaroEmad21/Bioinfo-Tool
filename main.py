@@ -32,6 +32,7 @@ if answer.upper() in ["DNA","1"]:
         #file_type= input("file type: ")
         for record in SeqIO.parse(f"sequence.fasta", "fasta"):
             seq = record.seq
+            ids = record.id
             print(f"id = {record.description} \n your sequence is: {seq}")
     # the second choice will be removed later
     elif parse_or_seq.lower() in ["seq","2"]:
@@ -107,7 +108,7 @@ if answer.upper() in ["DNA","1"]:
         elif next_step.lower() in ['al', '9']:
             make_alignment(seq)
         elif next_step.lower() in ['phylo', '10']:
-            make_phylo(seq) 
+            make_phylo(seq,ids) 
         # to break the loop   
         elif next_step.lower() in  ['stop' ,'x']:
             break
