@@ -117,7 +117,7 @@ if answer.upper() in ["DNA","1"]:
 
     """
         this makes nearly same things as in Dna 
-        but for Rna Except back transcribe
+        but for Rna Except back transcribe 
     """
 
 elif answer.upper() in ["rna","2"]:
