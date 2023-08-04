@@ -107,6 +107,7 @@ if answer.upper() in ["DNA","1"]:
         # making alignment    
         elif next_step.lower() in ['al', '9']:
             make_alignment(seq)
+        # makes and reads phylogenetic tree    
         elif next_step.lower() in ['phylo', '10']:
             make_phylo(seq,ids) 
         # to break the loop   

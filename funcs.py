@@ -50,6 +50,7 @@ def make_alignment(seq):
     # Multiple sequence alignment (MSA)     
     # remember to put all needed files in one folder               
     elif Q1 >= 3:
+            # asks if it's a file or a folder             
             Q5 = input("File or Folder (1 or 2) ")
             if Q5 == "1":
                 seqs=[]
@@ -81,9 +82,6 @@ def make_alignment(seq):
 
 
 # makes phylo genetic tree
-
-
-
 def make_phylo(seq,ids):
     info = input("do you want to include your sequence? (y or n) ")
     if info == "y":
