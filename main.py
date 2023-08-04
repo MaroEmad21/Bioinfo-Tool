@@ -127,7 +127,7 @@ elif answer.upper() in ["rna","2"]:
     if parse_or_seq.lower() in ["file","1"]:
         #file_path= input("file name: ")
         #file_type= input("file type: ")
-        for record in SeqIO.parse(f"sequence.fasta", "fasta"):
+        for record in SeqIO.parse(f"newseq.fasta", "fasta"):
             seq = record.seq
             ids = record.id
             print(f"id = {record.description} \n your sequence is: {seq}")

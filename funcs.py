@@ -82,6 +82,10 @@ def make_alignment(seq):
 
 
 # makes phylo genetic tree
+"""
+it takes the sequence inputed in case user wanted to compare it with other files 
+        after making all needed analysis or expression
+"""
 def make_phylo(seq,ids):
     info = input("do you want to include your sequence? (y or n) ")
     if info == "y":
