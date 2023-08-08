@@ -10,6 +10,10 @@ from Bio.SeqUtils import *
 from Bio.Align import  MultipleSeqAlignment , PairwiseAligner
 import os
 import glob
+import random 
+from primer3 import calc_tm ,calc_hairpin
+
+
 
 # function that makes alignment and saves it in a clustal file
 # NOTE!!! you should put all files to be aligned in one folder
@@ -88,7 +92,7 @@ it takes the sequence inputed in case user wanted to compare it with other files
 """
 def make_phylo(seq,ids):
     info = input("do you want to include your sequence? (y or n) ")
-    if info == "y":
+    if info.lower() == "y":
         info2 = input("File or Folder? (1 or 2) ")
         if info2 == "1":
             seqs=[]
@@ -139,7 +143,7 @@ def make_phylo(seq,ids):
             # Draw the phlyogenetic tree using terminal
             Phylo.draw_ascii(NJTree)
             raise ValueError("try again")
-    elif info == "n":
+    elif info.lower() == "n":
         info2 = input("File or Folder? (1 or 2) ")
         if info2 == "1":
             seqs=[]
@@ -193,5 +197,55 @@ def make_phylo(seq,ids):
     else:
         print("choose well!!!!!")
 
+""" 
+    Primer desgining that depends on the Restriction Enzyme 
+    But till now it will generate random sequence with certain conditions
+"""
+#primer generator
+def get_primer(sequence):
+    Q1 = input("Primer Within sequence or out of sequences(1 or 2)? ")
+    if Q1 == "1":
+        print(Q1)
+    elif Q1 == "2":
+        size= int(input("size [18 : 24]"))
+        if size > 24 or size < 18:
+           print("this will be problem")
+        else:
+            Nucleotides= ["A","C","G","T"]
+            Forward=''.join([random.choice(Nucleotides)
+                                for nuc in range(size)])
+            reverse=''.join([random.choice(Nucleotides)
+                                for nuc in range(size)]) 
+            
+        while True:
+            if round(gc_fraction(Forward)*100) in range(40,60) and round(calc_tm(Forward)) in range(50,60) and round(gc_fraction(reverse)*100) in range(40,60) and round(calc_tm(reverse)) in range(50,60) and str(calc_hairpin(Forward)) == "ThermoResult(structure_found=False, tm=0.00, dg=0.00, dh=0.00, ds=0.00)" and  str(calc_hairpin(reverse)) == "ThermoResult(structure_found=False, tm=0.00, dg=0.00, dh=0.00, ds=0.00)": 
+                print("correct")
+                print(Forward) 
+                
+                print(round(gc_fraction(Forward)*100))
+                print(round(calc_tm(Forward)))
+                print(calc_hairpin(Forward))
+                print(reverse) 
+                print(round(gc_fraction(reverse)*100))
+                print(round(calc_tm(reverse)))
+                print(calc_hairpin(reverse))
+                align= PairwiseAligner()
+                align.mode == "local"
+                print(align.align(Forward,reverse)[0])
+                break
+            else:
+                Forward=''.join([random.choice(Nucleotides)
+                                for nuc in range(size)])
+                reverse=''.join([random.choice(Nucleotides)
+                                for nuc in range(size)])
+                continue
+    else :
+        raise ValueError("WRONG VALUE")        
+    
 
 
+
+
+
+def add_primer():
+    print("On development")

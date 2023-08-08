@@ -46,8 +46,8 @@ if answer.upper() in ["DNA","1"]:
     while True:
         next_step = input(
     """what's next: 
-    1) transcribe   
-    2) translate  
+    1)Back transcribe   
+    2)translate  
     3)complement seq(comp) 
     4)reverse_complement(rev-comp) 
     5)reverse_complement_rna(5) 
@@ -56,11 +56,12 @@ if answer.upper() in ["DNA","1"]:
     8)six frame translation
     9)Alignment
     10)phylognetic tree
+    11) Primer
     __stop or x:  """)
-        # transcription
+        # Back transcription
         if next_step.lower() in  ['transcribe' ,'1']:
-            print(f"m-RNA is: {seq.transcribe()}")
-            records= SeqRecord(seq.transcribe(),id='',name='transcribe',description=f'{record.description}')
+            print(f"m-RNA is: {seq.back_transcribe()}")
+            records= SeqRecord(seq.back_transcribe(),id='',name='back_transcribe',description=f'{record.description}')
             name = input("name of file:")
             with open(name +".fasta", "w") as handle:
                 SeqIO.write(records, handle, "fasta")
@@ -94,7 +95,7 @@ if answer.upper() in ["DNA","1"]:
                 SeqIO.write(records, handle, "fasta")
         #GC content        
         elif next_step.lower() in  ['gc','6']:
-            print(f"GC %: {round(gc_fraction(seq) * 100) }")
+            print(f"GC %: {round(gc_fraction(seq) * 100) }%")
         # molecular weight    
         elif next_step.lower() in ['mw', '7']:
             print(f'Moleceular weight: {molecular_weight(seq)}')
@@ -110,7 +111,9 @@ if answer.upper() in ["DNA","1"]:
             make_alignment(seq)
         # makes and reads phylogenetic tree    
         elif next_step.lower() in ['phylo', '10']:
-            make_phylo(seq,ids) 
+            make_phylo(seq,ids)
+        elif next_step.lower() in ['pr', '11']:
+            get_primer(seq)     
         # to break the loop   
         elif next_step.lower() in  ['stop' ,'x']:
             break
@@ -152,8 +155,9 @@ elif answer.upper() in ["rna","2"]:
     8)six frame translation
     9)Alignment
     10)phylognetic tree
+    11) Primer
     __stop or x:  """)
-        # transcription
+        # Back transcription
         if next_step.lower() in  ['transcribe' ,'1']:
             print(f"m-RNA is: {seq.back_transcribe()}")
             records= SeqRecord(seq.back_transcribe(),id='',name='back_transcribe',description=f'{record.description}')
@@ -206,7 +210,10 @@ elif answer.upper() in ["rna","2"]:
             make_alignment(seq)
         # makes and reads phylogenetic tree    
         elif next_step.lower() in ['phylo', '10']:
-            make_phylo(seq,ids) 
+            make_phylo(seq,ids)
+        # produce Primer    
+        elif next_step.lower() in ['pr', '11']:
+            get_primer(seq)     
         # to break the loop   
         elif next_step.lower() in  ['stop' ,'x']:
             break
