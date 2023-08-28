@@ -5,6 +5,7 @@ doesn't exist in libraries
 
 from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
 from Bio import   SeqIO  ,Phylo
+from Bio.Seq import Seq 
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
 from Bio.Align import  MultipleSeqAlignment , PairwiseAligner
@@ -12,9 +13,11 @@ import os
 import glob
 import random 
 from primer3 import calc_tm ,calc_hairpin
-
-
-
+from Bio.Restriction import AllEnzymes
+from Bio.Restriction.Restriction import RestrictionBatch
+from pydna.gel import gel 
+from pydna.ladders import GeneRuler_1kb
+from pydna.dseqrecord import Dseqrecord
 # function that makes alignment and saves it in a clustal file
 # NOTE!!! you should put all files to be aligned in one folder
 def make_alignment(seq):
@@ -202,7 +205,15 @@ def make_phylo(seq,ids):
     But till now it will generate random sequence with certain conditions
 """
 #primer generator
-def get_primer(sequence):
+"""
+    Generates as random sequence that could be added to the sequence
+    as an extended part to clone th whole sequence
+    with properties of a good primer and not forming a hairpin structure
+""" 
+
+
+
+def get_primer(sequence,id):
     Q1 = input("Primer Within sequence or out of sequences(1 or 2)? ")
     if Q1 == "1":
         print(Q1)
@@ -216,12 +227,9 @@ def get_primer(sequence):
                                 for nuc in range(size)])
             reverse=''.join([random.choice(Nucleotides)
                                 for nuc in range(size)]) 
-            
         while True:
             if round(gc_fraction(Forward)*100) in range(40,60) and round(calc_tm(Forward)) in range(50,60) and round(gc_fraction(reverse)*100) in range(40,60) and round(calc_tm(reverse)) in range(50,60) and str(calc_hairpin(Forward)) == "ThermoResult(structure_found=False, tm=0.00, dg=0.00, dh=0.00, ds=0.00)" and  str(calc_hairpin(reverse)) == "ThermoResult(structure_found=False, tm=0.00, dg=0.00, dh=0.00, ds=0.00)": 
-                print("correct")
                 print(Forward) 
-                
                 print(round(gc_fraction(Forward)*100))
                 print(round(calc_tm(Forward)))
                 print(calc_hairpin(Forward))
@@ -232,6 +240,8 @@ def get_primer(sequence):
                 align= PairwiseAligner()
                 align.mode == "local"
                 print(align.align(Forward,reverse)[0])
+                #mainQ=input("do you want")
+                add_primer(sequence,Forward,reverse,id)
                 break
             else:
                 Forward=''.join([random.choice(Nucleotides)
@@ -246,6 +256,45 @@ def get_primer(sequence):
 
 
 
+#this function adds primer to the sequnece 
+def add_primer(seq,forward,reverse,id):
+    print(f"{colored(forward)}{seq}{colored(reverse)}")
+    newsequence= Seq(f"{forward}{seq}{reverse}")
+    newsequence= SeqRecord(newsequence,id=id,description="sequence with primer")
+    name = input("name of file:")
+    with open(name +".fasta", "w") as handle:
+        SeqIO.write(newsequence, handle, "fasta")
 
-def add_primer():
-    print("On development")
+
+
+
+# to colorize sequences
+def colored(seq):
+    bcolors = {
+        'A': '\033[92m',
+        'C': '\033[92m',
+        'G': '\033[92m',
+        'T': '\033[92m',
+        'U': '\033[92m',
+        'reset': '\033[0;0m'
+    }
+
+    tmpStr = ""
+
+    for nuc in seq:
+        if nuc in bcolors:
+            tmpStr += bcolors[nuc] + nuc
+        else:
+            tmpStr += bcolors['reset'] + nuc
+
+    return tmpStr + '\033[0;0m'
+            
+            
+
+
+
+Nucleotides= ["A","C","G","T"]
+
+Forward=''.join([random.choice(Nucleotides)
+                                for nuc in range(20)])
+

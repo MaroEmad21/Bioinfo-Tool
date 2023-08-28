@@ -113,7 +113,7 @@ if answer.upper() in ["DNA","1"]:
         elif next_step.lower() in ['phylo', '10']:
             make_phylo(seq,ids)
         elif next_step.lower() in ['pr', '11']:
-            get_primer(seq)     
+            get_primer(seq,ids)     
         # to break the loop   
         elif next_step.lower() in  ['stop' ,'x']:
             break
@@ -213,7 +213,7 @@ elif answer.upper() in ["rna","2"]:
             make_phylo(seq,ids)
         # produce Primer    
         elif next_step.lower() in ['pr', '11']:
-            get_primer(seq)     
+            get_primer(seq,ids)     
         # to break the loop   
         elif next_step.lower() in  ['stop' ,'x']:
             break
