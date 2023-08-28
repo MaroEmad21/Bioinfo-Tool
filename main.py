@@ -10,7 +10,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
 from funcs import *   # to use functions made that not exist in Biopython
-
 Nucleotides= ["A","C","G","T"]
 # this is used as debugger to  the tool
 randomStr=''.join([random.choice(Nucleotides)
@@ -22,7 +21,8 @@ randomStr=''.join([random.choice(Nucleotides)
 answer = input( 
                """which sequece you will type?
 (Dna or 1)
-(Rna or 2)  """)
+(Rna or 2)  
+(enzyme map or 3) """)
 
 if answer.upper() in ["DNA","1"]:
     parse_or_seq = input("file or seq: ")
@@ -217,6 +217,26 @@ elif answer.upper() in ["rna","2"]:
         # to break the loop   
         elif next_step.lower() in  ['stop' ,'x']:
             break
+# this to ask if making enzyme map        
+elif answer.upper() in ["enz","3"]:
+    parse_or_seq = input("file or seq: ")
+    """user enters file path and file type manually but used once
+                    (will be updated)""" 
+    if parse_or_seq.lower() in ["file","1"]:
+        #file_path= input("file name: ")
+        #file_type= input("file type: ")
+        for record in SeqIO.parse(f"sequence.fasta", "fasta"):
+            seq = record.seq
+            ids = record.id
+            print(f"id = {record.description} \n your sequence is: {seq}")
+    # the second choice will be removed later
+    elif parse_or_seq.lower() in ["seq","2"]:
+        sequence = randomStr
+        seq = Seq(sequence)
+        print(f"sequence is: {seq}")
+    else:
+        print("Choose well")
+    enzyme_map(seq,ids)    
 else:
     pass        
 

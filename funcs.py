@@ -13,11 +13,15 @@ import os
 import glob
 import random 
 from primer3 import calc_tm ,calc_hairpin
-from Bio.Restriction import AllEnzymes
+from Bio.Restriction import *
 from Bio.Restriction.Restriction import RestrictionBatch
 from pydna.gel import gel 
 from pydna.ladders import GeneRuler_1kb
 from pydna.dseqrecord import Dseqrecord
+from reportlab.lib.units import cm
+from Bio.Graphics import GenomeDiagram
+from Bio import SeqIO
+from Bio.SeqFeature import SeqFeature, SimpleLocation
 # function that makes alignment and saves it in a clustal file
 # NOTE!!! you should put all files to be aligned in one folder
 def make_alignment(seq):
@@ -298,3 +302,48 @@ Nucleotides= ["A","C","G","T"]
 Forward=''.join([random.choice(Nucleotides)
                                 for nuc in range(20)])
 
+
+
+
+# it makes the enzyme map
+def enzyme_map(sequence,id):
+    # here it maps all the enzymes that cuts the sequence
+    Analog= Analysis(AllEnzymes,sequence)
+    # different types of cuts  
+    ask =  input("""which type of analysis? 
+full(1)
+blunt(2)
+overhang5(3)
+overhang3(4)
+defined(5)
+with_sites(6)
+without_site(7)
+with_N_sites(8)
+with_site_size(9)
+""")
+    if ask.lower() == "1": 
+        Analog.full()
+    elif ask.lower() == "2":
+        Analog.blunt()
+    elif ask.lower() == "3":
+        Analog.overhang5() 
+    elif ask.lower() == "4":
+        Analog.overhang3() 
+    elif ask.lower() == "5":
+        Analog.defined() 
+    elif ask.lower() == "6":
+        Analog.with_sites() 
+    elif ask.lower() == "7":
+        Analog.without_site() 
+    elif ask.lower() == "8":
+        N =int(input("number of sites: ")) 
+        Analog.with_N_sites(N) 
+    elif ask.lower() == "9":
+        N =int(input("site size: ")) 
+        Analog.with_site_size(N)
+    Analog.print_as("map")
+    # saves it in a file of text format
+    name = input("name of file:")
+    test = open(name+".txt",'w')
+    test.write(str(Analog.format_output()))
+    test.close()
