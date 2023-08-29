@@ -2,7 +2,6 @@
 this file will contain all functions needed to be made for the tool that 
 doesn't exist in libraries
 """
-
 from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
 from Bio import   SeqIO  ,Phylo
 from Bio.Seq import Seq 
@@ -18,6 +17,7 @@ from Bio.Restriction.Restriction import RestrictionBatch
 from pydna.gel import gel 
 from pydna.ladders import GeneRuler_1kb
 from pydna.dseqrecord import Dseqrecord
+from reportlab.lib import colors
 from reportlab.lib.units import cm
 from Bio.Graphics import GenomeDiagram
 from Bio import SeqIO
@@ -305,9 +305,20 @@ Forward=''.join([random.choice(Nucleotides)
 
 
 
+
+
+def index_of_M(seq):
+       for aa in seq:
+        # START accumulating amino acids if M - START was found
+        if aa == "M":
+            return seq[aa].index
+
+
+
 # it makes the enzyme map
 def enzyme_map(sequence,id):
     # here it maps all the enzymes that cuts the sequence
+    C_contain=RestrictionBatch([],['X'])
     Analog= Analysis(AllEnzymes,sequence)
     # different types of cuts  
     ask =  input("""which type of analysis? 
@@ -347,3 +358,40 @@ with_site_size(9)
     test = open(name+".txt",'w')
     test.write(str(Analog.format_output()))
     test.close()
+    # testing making a draw
+    gd_diagram = GenomeDiagram.Diagram(id)
+    gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
+    gd_feature_set = gd_track_for_features.new_set()
+    for enzyme in C_contain:
+        for site, name, color in [
+        (enzyme.site,str(enzyme),colors.lightsteelblue)
+        ]:
+            index = 0
+            while True:
+                index = sequence.find(site, start=index)
+                if index == -1:
+                    break
+                feature = SeqFeature(SimpleLocation(index, index + len(site)))
+                gd_feature_set.add_feature(
+                feature,
+                color=color,
+                name=name,
+                label=True,
+                label_size=10,
+                
+
+)
+                index += len(site)
+                gd_diagram.draw(
+                            format="circular",
+                            circular=True,
+                            pagesize=(40 * cm, 40 * cm),
+                            start=0,
+                            end=len(sequence),
+                            circle_core=0.5,
+
+)               
+                
+                #feature = SeqFeature(SimpleLocation(index,index+len(sequence)),type="ORF").translate(sequence,start_offset=1,to_stop=True,)
+                #gd_feature_set.add_feature(feature, sigil="ARROW", color="blue", arrowhead_length=0.25)
+                gd_diagram.write("test.pdf", "Pdf",dpi=300)
