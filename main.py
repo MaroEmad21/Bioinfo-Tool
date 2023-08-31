@@ -46,7 +46,7 @@ if answer.upper() in ["DNA","1"]:
     while True:
         next_step = input(
     """what's next: 
-    1)Back transcribe   
+    1)transcribe   
     2)translate  
     3)complement seq(comp) 
     4)reverse_complement(rev-comp) 
@@ -60,8 +60,8 @@ if answer.upper() in ["DNA","1"]:
     __stop or x:  """)
         # Back transcription
         if next_step.lower() in  ['transcribe' ,'1']:
-            print(f"m-RNA is: {seq.back_transcribe()}")
-            records= SeqRecord(seq.back_transcribe(),id='',name='back_transcribe',description=f'{record.description}')
+            print(f"m-RNA is: {seq.transcribe()}")
+            records= SeqRecord(seq.transcribe(),id='',name='back_transcribe',description=f'{record.description}')
             name = input("name of file:")
             with open(name +".fasta", "w") as handle:
                 SeqIO.write(records, handle, "fasta")
@@ -213,7 +213,7 @@ elif answer.upper() in ["rna","2"]:
             make_phylo(seq,ids)
         # produce Primer    
         elif next_step.lower() in ['pr', '11']:
-            get_primer(seq,ids)     
+            get_primer(seq,ids)
         # to break the loop   
         elif next_step.lower() in  ['stop' ,'x']:
             break
@@ -228,7 +228,7 @@ elif answer.upper() in ["enz","3"]:
         for record in SeqIO.parse(f"sequence.fasta", "fasta"):
             seq = record.seq
             ids = record.id
-            print(f"id = {record.description} \n your sequence is: {seq}")
+            #print(f"your sequence is: {seq}")
     # the second choice will be removed later
     elif parse_or_seq.lower() in ["seq","2"]:
         sequence = randomStr
@@ -236,7 +236,8 @@ elif answer.upper() in ["enz","3"]:
         print(f"sequence is: {seq}")
     else:
         print("Choose well")
-    enzyme_map(seq,ids)    
+    enzyme_map(seq,ids)
+    #new_translate(seq)  
 else:
     pass        
 

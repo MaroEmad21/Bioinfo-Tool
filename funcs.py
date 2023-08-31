@@ -8,20 +8,21 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
 from Bio.Align import  MultipleSeqAlignment , PairwiseAligner
-import os
 import glob
-import random 
+import random
 from primer3 import calc_tm ,calc_hairpin
 from Bio.Restriction import *
 from Bio.Restriction.Restriction import RestrictionBatch
 from pydna.gel import gel 
 from pydna.ladders import GeneRuler_1kb
 from pydna.dseqrecord import Dseqrecord
+from pydna.design import primer_design
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 from Bio.Graphics import GenomeDiagram
 from Bio import SeqIO
 from Bio.SeqFeature import SeqFeature, SimpleLocation
+from Bio.Data.CodonTable import list_possible_proteins
 # function that makes alignment and saves it in a clustal file
 # NOTE!!! you should put all files to be aligned in one folder
 def make_alignment(seq):
@@ -214,9 +215,6 @@ def make_phylo(seq,ids):
     as an extended part to clone th whole sequence
     with properties of a good primer and not forming a hairpin structure
 """ 
-
-
-
 def get_primer(sequence,id):
     Q1 = input("Primer Within sequence or out of sequences(1 or 2)? ")
     if Q1 == "1":
@@ -272,6 +270,13 @@ def add_primer(seq,forward,reverse,id):
 
 
 
+
+
+# a true primer designer 
+def primer_desiger(seq):
+    print("test")
+
+
 # to colorize sequences
 def colored(seq):
     bcolors = {
@@ -306,22 +311,17 @@ Forward=''.join([random.choice(Nucleotides)
 
 
 
-
-def index_of_M(seq):
-       for aa in seq:
-        # START accumulating amino acids if M - START was found
-        if aa == "M":
-            return seq[aa].index
-
-
-
+def new_translate(sequence):
+   print(list_possible_proteins(sequence))
 # it makes the enzyme map
 def enzyme_map(sequence,id):
     # here it maps all the enzymes that cuts the sequence
     C_contain=RestrictionBatch([],['X'])
-    Analog= Analysis(AllEnzymes,sequence)
+    Analog= Analysis(C_contain,sequence,False)
     # different types of cuts  
-    ask =  input("""which type of analysis? 
+    # loop to allow different times 
+    while True:
+            ask =  input("""which type of analysis? 
 full(1)
 blunt(2)
 overhang5(3)
@@ -331,34 +331,38 @@ with_sites(6)
 without_site(7)
 with_N_sites(8)
 with_site_size(9)
+stop(x)
 """)
-    if ask.lower() == "1": 
-        Analog.full()
-    elif ask.lower() == "2":
-        Analog.blunt()
-    elif ask.lower() == "3":
-        Analog.overhang5() 
-    elif ask.lower() == "4":
-        Analog.overhang3() 
-    elif ask.lower() == "5":
-        Analog.defined() 
-    elif ask.lower() == "6":
-        Analog.with_sites() 
-    elif ask.lower() == "7":
-        Analog.without_site() 
-    elif ask.lower() == "8":
-        N =int(input("number of sites: ")) 
-        Analog.with_N_sites(N) 
-    elif ask.lower() == "9":
-        N =int(input("site size: ")) 
-        Analog.with_site_size(N)
-    Analog.print_as("map")
-    # saves it in a file of text format
-    name = input("name of file:")
-    test = open(name+".txt",'w')
-    test.write(str(Analog.format_output()))
-    test.close()
-    # testing making a draw
+            if ask == "1": 
+                answer = Analog.full()
+            elif ask == "2":
+                answer = Analog.blunt()
+            elif ask == "3":
+                answer = Analog.overhang5() 
+            elif ask == "4":
+                answer = Analog.overhang3() 
+            elif ask == "5":
+                answer = Analog.defined() 
+            elif ask == "6":
+                answer = Analog.with_sites() 
+            elif ask == "7":
+                answer = Analog.without_site() 
+            elif ask == "8":
+                N =int(input("number of sites: ")) 
+                answer = Analog.with_N_sites(N) 
+            elif ask == "9":
+                N =int(input("site size: ")) 
+                answer = Analog.with_site_size(N)
+            elif ask.lower() == "x":
+                break
+            Analog.print_that(answer)
+            Analog.print_as("map")
+            # saves it in a file of text format
+            test = open("map.txt",'w')
+            test.write(str(Analog.format_output(answer)))
+            test.close()
+    #this will be made later 
+    """ # testing making a draw
     gd_diagram = GenomeDiagram.Diagram(id)
     gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
     gd_feature_set = gd_track_for_features.new_set()
@@ -392,6 +396,8 @@ with_site_size(9)
 
 )               
                 
-                #feature = SeqFeature(SimpleLocation(index,index+len(sequence)),type="ORF").translate(sequence,start_offset=1,to_stop=True,)
+                #feature = SeqFeature(SimpleLocation(index_of_M(sequence),index+len(sequence)),type="ORF").translate(sequence,start_offset=1,to_stop=True,)
                 #gd_feature_set.add_feature(feature, sigil="ARROW", color="blue", arrowhead_length=0.25)
-                gd_diagram.write("test.pdf", "Pdf",dpi=300)
+                #gd_diagram.write("test.pdf", "Pdf",dpi=300)
+"""
+                
