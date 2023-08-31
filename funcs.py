@@ -215,7 +215,7 @@ def make_phylo(seq,ids):
     as an extended part to clone th whole sequence
     with properties of a good primer and not forming a hairpin structure
 """ 
-def get_primer(sequence,id):
+def get_primer_seq(sequence,id):
     Q1 = input("Primer Within sequence or out of sequences(1 or 2)? ")
     if Q1 == "1":
         print(Q1)
@@ -273,9 +273,20 @@ def add_primer(seq,forward,reverse,id):
 
 
 # a true primer designer 
-def primer_desiger(seq):
-    print("test")
-
+def primer_designer(seq):
+    for nuc in range(0,len(seq),1):
+        if seq[nuc].upper() == "U":
+            seq = seq.back_transcribe()
+            amplicon =  primer_design(Dseqrecord(seq))
+            break
+        else:
+            continue    
+    amplicon =  primer_design(Dseqrecord(seq))
+    test = open("primer.txt",'w')
+    test.write(str(amplicon.figure()))
+    test.write(str(amplicon.seq()))
+    test.close()
+    return amplicon
 
 # to colorize sequences
 def colored(seq):
