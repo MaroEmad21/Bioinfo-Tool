@@ -67,8 +67,8 @@ if answer.upper() in ["DNA","1"]:
                 SeqIO.write(records, handle, "fasta")
         # translate        
         elif next_step.lower() in ['translate','2']:
-                print(f"Amino acid seq: {seq.translate()}") 
-                records= SeqRecord(seq.translate(),id='',name='translate',description=f'{record.description}')
+                print(f"Amino acid seq: {new_translate(seq)}") 
+                records= SeqRecord(new_translate(seq),id='',name='translate',description=f'{record.description}')
                 name = input("name of file:")
                 with open(name +".fasta", "w") as handle:
                    SeqIO.write(records, handle, "fasta")
@@ -166,8 +166,8 @@ elif answer.upper() in ["rna","2"]:
                 SeqIO.write(records, handle, "fasta")
         # translate        
         elif next_step.lower() in ['translate','2']:
-                print(f"Amino acid seq: {seq.translate()}") 
-                records= SeqRecord(seq.translate(),id='',name='translate',description=f'{record.description}')
+                print(f"Amino acid seq: {new_translate(seq)}") 
+                records= SeqRecord(new_translate(seq),id='',name='translate',description=f'{record.description}')
                 name = input("name of file:")
                 with open(name +".fasta", "w") as handle:
                    SeqIO.write(records, handle, "fasta")
@@ -236,8 +236,8 @@ elif answer.upper() in ["enz","3"]:
         print(f"sequence is: {seq}")
     else:
         print("Choose well")
-    enzyme_map(seq)
-    #new_translate(seq)  
+    #enzyme_map(seq)
+    new_translate(seq) 
 else:
     pass        
 

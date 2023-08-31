@@ -8,6 +8,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
 from Bio.Align import  MultipleSeqAlignment , PairwiseAligner
+from Bio.Data.CodonTable import TranslationError
 import glob
 import random
 from primer3 import calc_tm ,calc_hairpin
@@ -325,9 +326,30 @@ Forward=''.join([random.choice(Nucleotides)
 
 
 
-def new_translate(sequence):
-   print(list_possible_proteins(sequence))
-# it makes the enzyme map
+
+# A new translate Function that produces 
+# a protein with the index of the start codon
+def new_translate(seq):
+    n=0
+    while True:
+        if len(seq) // 3 == 0:
+            pass
+        else:
+            seq = seq+"N"
+            break
+    for n in range(0,len(seq),1):
+        if seq[n:n+3].translate()==TranslationError:
+            n+=1
+            continue
+        elif seq[n:n+3].translate() == "M":
+            protein= seq[n:].translate(table=2,to_stop=True)
+            print(f"index of the start codon: {n , n+3}")
+            return protein  
+        else:
+            continue
+
+
+
 def enzyme_map(sequence):
     # here it maps all the enzymes that cuts the sequence
     C_contain=RestrictionBatch([],['X'])
