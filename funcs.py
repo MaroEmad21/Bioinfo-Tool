@@ -284,7 +284,10 @@ def primer_designer(seq):
     amplicon =  primer_design(Dseqrecord(seq))
     test = open("primer.txt",'w')
     test.write(str(amplicon.figure()))
-    test.write(str(amplicon.seq()))
+    test.write("\n \n")
+    test.write(f"forward: {amplicon.forward_primer.seq}")
+    test.write("\n")
+    test.write(f"reverse: {amplicon.reverse_primer.seq}")
     test.close()
     return amplicon
 
@@ -325,7 +328,7 @@ Forward=''.join([random.choice(Nucleotides)
 def new_translate(sequence):
    print(list_possible_proteins(sequence))
 # it makes the enzyme map
-def enzyme_map(sequence,id):
+def enzyme_map(sequence):
     # here it maps all the enzymes that cuts the sequence
     C_contain=RestrictionBatch([],['X'])
     Analog= Analysis(C_contain,sequence,False)

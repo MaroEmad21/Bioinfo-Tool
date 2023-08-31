@@ -236,7 +236,7 @@ elif answer.upper() in ["enz","3"]:
         print(f"sequence is: {seq}")
     else:
         print("Choose well")
-    enzyme_map(seq,ids)
+    enzyme_map(seq)
     #new_translate(seq)  
 else:
     pass        
