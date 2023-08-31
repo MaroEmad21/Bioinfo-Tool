@@ -352,7 +352,7 @@ def new_translate(seq):
 
 def enzyme_map(sequence):
     # here it maps all the enzymes that cuts the sequence
-    C_contain=RestrictionBatch([],['X'])
+    C_contain=RestrictionBatch([],['X','B','I'])
     Analog= Analysis(C_contain,sequence,False)
     # different types of cuts  
     # loop to allow different times 
