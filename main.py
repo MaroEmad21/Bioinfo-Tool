@@ -22,7 +22,8 @@ answer = input(
                """which sequece you will type?
 (Dna or 1)
 (Rna or 2)  
-(enzyme map or 3) """)
+(enzyme map or 3) 
+(Pcr or 4 )  """)
 
 if answer.upper() in ["DNA","1"]:
     parse_or_seq = input("file or seq: ")
@@ -236,8 +237,27 @@ elif answer.upper() in ["enz","3"]:
         print(f"sequence is: {seq}")
     else:
         print("Choose well")
-    #enzyme_map(seq)
-    new_translate(seq) 
+    enzyme_map(seq)
+#assemply and Pcr    
+elif answer.upper() in ["pcr","4"]:
+    parse_or_seq = input("file or seq: ")
+    """user enters file path and file type manually but used once
+                    (will be updated)""" 
+    if parse_or_seq.lower() in ["file","1"]:
+        #file_path= input("file name: ")
+        #file_type= input("file type: ")
+        for record in SeqIO.parse(f"sequence.fasta", "fasta"):
+            seq = record.seq
+            ids = record.id
+            #print(f"your sequence is: {seq}")
+    # the second choice will be removed later
+    elif parse_or_seq.lower() in ["seq","2"]:
+        sequence = randomStr
+        seq = Seq(sequence)
+        print(f"sequence is: {seq}")
+    else:
+        print("Choose well")
+    make_pcr(seq)
 else:
     pass        
 

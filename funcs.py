@@ -18,12 +18,11 @@ from pydna.gel import gel
 from pydna.ladders import GeneRuler_1kb
 from pydna.dseqrecord import Dseqrecord
 from pydna.design import primer_design
+from pydna.amplify import pcr,Anneal
+from pydna.primer import Primer
 from reportlab.lib import colors
 from reportlab.lib.units import cm
-from Bio.Graphics import GenomeDiagram
-from Bio import SeqIO
-from Bio.SeqFeature import SeqFeature, SimpleLocation
-from Bio.Data.CodonTable import list_possible_proteins
+from pydna.utils import rc
 # function that makes alignment and saves it in a clustal file
 # NOTE!!! you should put all files to be aligned in one folder
 def make_alignment(seq):
@@ -279,7 +278,7 @@ def primer_designer(seq):
         if seq[nuc].upper() == "U":
             seq = seq.back_transcribe()
             amplicon =  primer_design(Dseqrecord(seq))
-            break
+            return amplicon
         else:
             continue    
     amplicon =  primer_design(Dseqrecord(seq))
@@ -289,6 +288,8 @@ def primer_designer(seq):
     test.write(f"forward: {amplicon.forward_primer.seq}")
     test.write("\n")
     test.write(f"reverse: {amplicon.reverse_primer.seq}")
+    test.write("\n \n")
+    test.write(f"Program of PCR using Taq polymerase: {amplicon.program()}")
     test.close()
     return amplicon
 
@@ -349,7 +350,7 @@ def new_translate(seq):
             continue
 
 
-
+# enzyme map with mostly all commersial enzymes
 def enzyme_map(sequence):
     # here it maps all the enzymes that cuts the sequence
     C_contain=RestrictionBatch([],['X','B','I'])
@@ -437,3 +438,51 @@ stop(x)
                 #gd_diagram.write("test.pdf", "Pdf",dpi=300)
 """
                 
+
+
+
+# PCR maker
+def make_pcr(sequence):
+    # first check if primer anneal and how 
+    amplicon=primer_designer(sequence)
+    fp = Primer(amplicon.forward_primer.seq)
+    rp = Primer(amplicon.reverse_primer.seq)
+    anneal = Anneal([fp,rp],Dseqrecord(sequence))
+    print(f"report: {anneal.report()}\n")
+    #now we add sites of the restriction enzyme
+    main_q= input("want to add enzyme?(y or n) ")
+    if main_q.lower() == "y":
+        sec_q = int(input("how many enzymes?(1 or 2) "))
+        if sec_q == 1:
+            name= input("write enzyme name ")
+            enz = RestrictionBatch([name])
+            for i in enz:
+                site = i.site
+            site = Seq(site)
+            fp = site  + fp
+            rp = site.reverse_complement() + rp  
+            product= pcr(fp,rp,sequence)
+            print(product.figure())
+            return product
+        elif sec_q == 2:
+            name1=   input("write first enzyme name(forward enzyme) ")                  
+            enz1= RestrictionBatch([name1])
+            for a in enz1:
+                site1 = Seq(a.site)
+            name2=  input("write second enzyme name ")
+            enz2= RestrictionBatch([name2])
+            for b in  enz2:
+                site2 = Seq(b.site)
+            fp = site1 + fp
+            rp = site2.reverse_complement() + rp
+            product = pcr(fp,rp,sequence)
+            print(product.figure())
+            return product
+        else:
+            raise ValueError("Wrong value (1 or 2) only ")
+    elif main_q.lower() == "n":
+        product = pcr(fp,rp,sequence)
+        print(product.figure())
+        return product
+    else:
+        raise ValueError("please on only choose y or n")    
