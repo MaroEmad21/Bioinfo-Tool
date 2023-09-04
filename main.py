@@ -38,7 +38,6 @@ if answer.upper() in ["DNA","1"]:
             seq = record.seq
             ids = record.id
             print(f"id = {record.description} \n your sequence is: {seq}")
-    # the second choice will be removed later
     else:
         print("Choose well")    
     # this loops to get more info from the same file
@@ -134,7 +133,6 @@ elif answer.upper() in ["rna","2"]:
             seq = record.seq
             ids = record.id
             print(f"id = {record.description} \n your sequence is: {seq}")
-    # the second choice will be removed later
     else:
         print("Choose well")    
     # this loops to get more info from the same file
@@ -225,7 +223,6 @@ elif answer.upper() in ["enz","3"]:
             seq = record.seq
             ids = record.id
             #print(f"your sequence is: {seq}")
-    # the second choice will be removed later
     else:
         print("Choose well")
     enzyme_map(seq)
@@ -241,7 +238,6 @@ elif answer.upper() in ["pcr","4"]:
             seq = record.seq
             ids = record.id
             #print(f"your sequence is: {seq}")
-    # the second choice will be removed later
     else:
         print("Choose well")
     make_pcr(seq)
@@ -256,7 +252,6 @@ elif answer.upper() in ["cloning","5"]:
             seq = record.seq
             ids = record.id
             #print(f"your sequence is: {seq}")
-    # the second choice will be removed later
     else:
         print("Choose well")
     cloning(seq)    
