@@ -9,7 +9,8 @@ from Bio import SeqIO
 from Bio.Seq import Seq 
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
-from funcs import *   # to use functions made that not exist in Biopython
+from funcs import * 
+from pydna.readers import read  # to use functions made that not exist in Biopython
 Nucleotides= ["A","C","G","T"]
 # this is used as debugger to  the tool
 randomStr=''.join([random.choice(Nucleotides)
@@ -23,7 +24,8 @@ answer = input(
 (Dna or 1)
 (Rna or 2)  
 (enzyme map or 3) 
-(Pcr or 4 )  """)
+(Pcr or 4 )  
+(Cloning  or 5) """)
 
 if answer.upper() in ["DNA","1"]:
     parse_or_seq = input("file or seq: ")
@@ -32,7 +34,7 @@ if answer.upper() in ["DNA","1"]:
     if parse_or_seq.lower() in ["file","1"]:
         #file_path= input("file name: ")
         #file_type= input("file type: ")
-        for record in SeqIO.parse(f"sequence.fasta", "fasta"):
+        for record in read(f"sequence.fasta", "fasta"):
             seq = record.seq
             ids = record.id
             print(f"id = {record.description} \n your sequence is: {seq}")
@@ -102,10 +104,11 @@ if answer.upper() in ["DNA","1"]:
             print(f'Moleceular weight: {molecular_weight(seq)}')
         # ORFs    
         elif next_step.lower() in ['sixframe', '8']:
-            print(f'{six_frame_translations(seq) }')     
+            print(f'{Orf(seq) }')     
             name = input("name of file:")
             test = open(name+".txt",'w')
-            test.write(str(six_frame_translations(seq) ))
+            for protein in Orf(seq):
+                test.write(f"{protein}\n")
             test.close()
         # making alignment    
         elif next_step.lower() in ['al', '9']:
@@ -201,10 +204,10 @@ elif answer.upper() in ["rna","2"]:
             print(f'Moleceular weight: {molecular_weight(seq)}')
         # ORFs    
         elif next_step.lower() in ['sixframe', '8']:
-            print(f'{six_frame_translations(seq) }')     
+            print(f'{Orf(seq) }')     
             name = input("name of file:")
             test = open(name+".txt",'w')
-            test.write(str(six_frame_translations(seq) ))
+            test.write(str(Orf(seq) ))
             test.close()
         # making alignment    
         elif next_step.lower() in ['al', '9']:
@@ -258,6 +261,25 @@ elif answer.upper() in ["pcr","4"]:
     else:
         print("Choose well")
     make_pcr(seq)
+elif answer.upper() in ["cloning","5"]:
+    parse_or_seq = input("file or seq: ")
+    """user enters file path and file type manually but used once
+                    (will be updated)""" 
+    if parse_or_seq.lower() in ["file","1"]:
+        #file_path= input("file name: ")
+        #file_type= input("file type: ")
+        for record in SeqIO.parse(f"sequence.fasta", "fasta"):
+            seq = record.seq
+            ids = record.id
+            #print(f"your sequence is: {seq}")
+    # the second choice will be removed later
+    elif parse_or_seq.lower() in ["seq","2"]:
+        sequence = randomStr
+        seq = Seq(sequence)
+        print(f"sequence is: {seq}")
+    else:
+        print("Choose well")
+    cloning(seq)    
 else:
     pass        
 

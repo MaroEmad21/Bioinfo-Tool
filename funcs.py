@@ -343,7 +343,7 @@ def new_translate(seq):
             n+=1
             continue
         elif seq[n:n+3].translate() == "M":
-            protein= seq[n:].translate(table=2,to_stop=True)
+            protein= seq[n:].translate(table=2)
             print(f"index of the start codon: {n , n+3}")
             return protein  
         else:
@@ -486,3 +486,18 @@ def make_pcr(sequence):
         return product
     else:
         raise ValueError("please on only choose y or n")    
+    
+def Orf(sequence):
+    proteins = []
+    i=1
+    for orf in Dseqrecord(sequence).orfs():
+        proteins.append(f"protein no. {i}: {orf.translate().seq}")
+        i+=1
+    return proteins
+"""  And now it's to for making the cloning Function.
+Since Most plasmids are 
+
+
+"""    
+def cloning(sequence):
+    print("cloning")
