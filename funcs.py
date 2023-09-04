@@ -11,6 +11,7 @@ from Bio.Align import  MultipleSeqAlignment , PairwiseAligner
 from Bio.Data.CodonTable import TranslationError
 import glob
 import random
+from pydna.readers import read
 from primer3 import calc_tm ,calc_hairpin
 from Bio.Restriction import *
 from Bio.Restriction.Restriction import RestrictionBatch
@@ -23,6 +24,7 @@ from pydna.primer import Primer
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 from pydna.utils import rc
+from pydna.all import *
 # function that makes alignment and saves it in a clustal file
 # NOTE!!! you should put all files to be aligned in one folder
 def make_alignment(seq):
@@ -500,4 +502,7 @@ Since Most plasmids are
 
 """    
 def cloning(sequence):
-    print("cloning")
+    """Sub cloning by restriction digestion and ligation"""
+    #vector_path = input("file name: ")
+    vector =  read("sequence.gb")
+    

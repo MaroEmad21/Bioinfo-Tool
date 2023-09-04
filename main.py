@@ -39,10 +39,6 @@ if answer.upper() in ["DNA","1"]:
             ids = record.id
             print(f"id = {record.description} \n your sequence is: {seq}")
     # the second choice will be removed later
-    elif parse_or_seq.lower() in ["seq","2"]:
-        sequence = randomStr
-        seq = Seq(sequence)
-        print(f"sequence is: {seq}")
     else:
         print("Choose well")    
     # this loops to get more info from the same file
@@ -139,10 +135,6 @@ elif answer.upper() in ["rna","2"]:
             ids = record.id
             print(f"id = {record.description} \n your sequence is: {seq}")
     # the second choice will be removed later
-    elif parse_or_seq.lower() in ["seq","2"]:
-        sequence = randomStr
-        seq = Seq(sequence)
-        print(f"sequence is: {seq}")
     else:
         print("Choose well")    
     # this loops to get more info from the same file
@@ -234,10 +226,6 @@ elif answer.upper() in ["enz","3"]:
             ids = record.id
             #print(f"your sequence is: {seq}")
     # the second choice will be removed later
-    elif parse_or_seq.lower() in ["seq","2"]:
-        sequence = randomStr
-        seq = Seq(sequence)
-        print(f"sequence is: {seq}")
     else:
         print("Choose well")
     enzyme_map(seq)
@@ -254,10 +242,6 @@ elif answer.upper() in ["pcr","4"]:
             ids = record.id
             #print(f"your sequence is: {seq}")
     # the second choice will be removed later
-    elif parse_or_seq.lower() in ["seq","2"]:
-        sequence = randomStr
-        seq = Seq(sequence)
-        print(f"sequence is: {seq}")
     else:
         print("Choose well")
     make_pcr(seq)
@@ -273,10 +257,6 @@ elif answer.upper() in ["cloning","5"]:
             ids = record.id
             #print(f"your sequence is: {seq}")
     # the second choice will be removed later
-    elif parse_or_seq.lower() in ["seq","2"]:
-        sequence = randomStr
-        seq = Seq(sequence)
-        print(f"sequence is: {seq}")
     else:
         print("Choose well")
     cloning(seq)    
