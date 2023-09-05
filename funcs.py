@@ -13,7 +13,7 @@ import glob
 import random
 from pydna.readers import read
 from primer3 import calc_tm ,calc_hairpin
-from Bio.Restriction import *
+from Bio.Restriction import Analysis
 from Bio.Restriction.Restriction import RestrictionBatch
 from pydna.gel import gel 
 from pydna.ladders import GeneRuler_1kb
@@ -24,7 +24,6 @@ from pydna.primer import Primer
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 from pydna.utils import rc
-from pydna.all import *
 # function that makes alignment and saves it in a clustal file
 # NOTE!!! you should put all files to be aligned in one folder
 def make_alignment(seq):
@@ -505,4 +504,27 @@ def cloning(sequence):
     """Sub cloning by restriction digestion and ligation"""
     #vector_path = input("file name: ")
     vector =  read("sequence.gb")
-    
+    cutters = []
+    for cutter in vector.n_cutters(n=1):
+        cutters.append(cutter)
+    print(f" one cutters with sticky ends: {cutters}")
+    main_Q = input("write name of the enzyme to linearize the vector: ")
+    enzyme = RestrictionBatch([main_Q])
+    for a in enzyme:
+        linear_vector  = vector.linearize(a)
+    enzyme_map(sequence)
+    prod=make_pcr(sequence)
+    def choose_enzyme():
+        sec_q= input("name of the enzyme that cuts the insert: ")
+        enzyme2 = RestrictionBatch([sec_q])
+        for a in enzyme2:
+            stuffer1, insert, stuffer2 = prod.cut(a)
+        return insert    
+    # then we assemble all together
+    insert= choose_enzyme()
+    insert.name= "insert"
+    Recomb = (linear_vector+insert).looped()
+    if  Recomb == TypeError:
+        choose_enzyme()
+    else:    
+        Recomb.write("test2.txt")    

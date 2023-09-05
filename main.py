@@ -9,8 +9,7 @@ from Bio import SeqIO
 from Bio.Seq import Seq 
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
-from funcs import * 
-from pydna.readers import read  # to use functions made that not exist in Biopython
+from funcs import *   # to use functions made that not exist in Biopython
 Nucleotides= ["A","C","G","T"]
 # this is used as debugger to  the tool
 randomStr=''.join([random.choice(Nucleotides)
@@ -247,11 +246,7 @@ elif answer.upper() in ["cloning","5"]:
                     (will be updated)""" 
     if parse_or_seq.lower() in ["file","1"]:
         #file_path= input("file name: ")
-        #file_type= input("file type: ")
-        for record in SeqIO.parse(f"sequence.fasta", "fasta"):
-            seq = record.seq
-            ids = record.id
-            #print(f"your sequence is: {seq}")
+        seq = read("sequence.fasta").seq
     else:
         print("Choose well")
     cloning(seq)    
