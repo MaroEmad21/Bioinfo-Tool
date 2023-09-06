@@ -246,7 +246,7 @@ elif answer.upper() in ["cloning","5"]:
                     (will be updated)""" 
     if parse_or_seq.lower() in ["file","1"]:
         #file_path= input("file name: ")
-        seq = read("sequence.fasta").seq
+        seq = read("newseq.gb").seq
     else:
         print("Choose well")
     cloning(seq)    

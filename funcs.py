@@ -505,26 +505,30 @@ def cloning(sequence):
     #vector_path = input("file name: ")
     vector =  read("sequence.gb")
     cutters = []
+    # once cutters in vector
     for cutter in vector.n_cutters(n=1):
         cutters.append(cutter)
     print(f" one cutters with sticky ends: {cutters}")
+    #user must choose an enzyme to linearize the vector
     main_Q = input("write name of the enzyme to linearize the vector: ")
     enzyme = RestrictionBatch([main_Q])
     for a in enzyme:
         linear_vector  = vector.linearize(a)
+    # makes a map of enzymes 
     enzyme_map(sequence)
+    # making pcr
     prod=make_pcr(sequence)
-    def choose_enzyme():
-        sec_q= input("name of the enzyme that cuts the insert: ")
-        enzyme2 = RestrictionBatch([sec_q])
-        for a in enzyme2:
-            stuffer1, insert, stuffer2 = prod.cut(a)
-        return insert    
-    # then we assemble all together
-    insert= choose_enzyme()
-    insert.name= "insert"
-    Recomb = (linear_vector+insert).looped()
-    if  Recomb == TypeError:
-        choose_enzyme()
-    else:    
-        Recomb.write("test2.txt")    
+    sec_q= input("name of the enzyme that cuts the insert: ")
+    enzyme2 = RestrictionBatch([sec_q])
+    for a in enzyme2:
+        stuffer1, insert, stuffer2 = prod.cut(a)    
+    # then we assemble all together 
+    # recombined product is saved in txt file 
+    # NOTE there will be further updates
+    try:
+        Recomb = (linear_vector+insert).looped()  
+        Recomb.write("test3.txt")
+    # to retry if errors occured  if ends are not compatible      
+    except TypeError or ValueError:
+        print("try again STICKY ENDS are not compaible!!!!!")
+        cloning(sequence)
