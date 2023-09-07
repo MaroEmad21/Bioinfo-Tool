@@ -4,16 +4,11 @@
     that could be used In Bioinformatics
     this is Version 1.0  
 """
-import random 
 from Bio import SeqIO 
 from Bio.Seq import Seq 
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
 from funcs import *   # to use functions made that not exist in Biopython
-Nucleotides= ["A","C","G","T"]
-# this is used as debugger to  the tool
-randomStr=''.join([random.choice(Nucleotides)
-                   for nuc in range(21)])
 
 
 
@@ -240,15 +235,9 @@ elif answer.upper() in ["pcr","4"]:
     else:
         print("Choose well")
     make_pcr(seq)
-elif answer.upper() in ["cloning","5"]:
-    parse_or_seq = input("file or seq: ")
-    """user enters file path and file type manually but used once
-                    (will be updated)""" 
-    if parse_or_seq.lower() in ["file","1"]:
-        #file_path= input("file name: ")
-        seq = read("newseq.gb").seq
-    else:
-        print("Choose well")
+elif answer.upper() in ["cloning","5"]: 
+    #file_path= input("file name: ")
+    seq = read("newseq.gb").seq
     cloning(seq)    
 else:
     pass        

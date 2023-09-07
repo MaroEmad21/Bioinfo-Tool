@@ -21,6 +21,7 @@ from pydna.dseqrecord import Dseqrecord
 from pydna.design import primer_design
 from pydna.amplify import pcr,Anneal
 from pydna.primer import Primer
+from pydna.assembly import Assembly
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 from pydna.utils import rc
@@ -501,34 +502,64 @@ Since Most plasmids are
 
 """    
 def cloning(sequence):
-    """Sub cloning by restriction digestion and ligation"""
-    #vector_path = input("file name: ")
-    vector =  read("sequence.gb")
-    cutters = []
-    # once cutters in vector
-    for cutter in vector.n_cutters(n=1):
-        cutters.append(cutter)
-    print(f" one cutters with sticky ends: {cutters}")
-    #user must choose an enzyme to linearize the vector
-    main_Q = input("write name of the enzyme to linearize the vector: ")
-    enzyme = RestrictionBatch([main_Q])
-    for a in enzyme:
-        linear_vector  = vector.linearize(a)
-    # makes a map of enzymes 
-    enzyme_map(sequence)
-    # making pcr
-    prod=make_pcr(sequence)
-    sec_q= input("name of the enzyme that cuts the insert: ")
-    enzyme2 = RestrictionBatch([sec_q])
-    for a in enzyme2:
-        stuffer1, insert, stuffer2 = prod.cut(a)    
-    # then we assemble all together 
-    # recombined product is saved in txt file 
-    # NOTE there will be further updates
-    try:
-        Recomb = (linear_vector+insert).looped()  
-        Recomb.write("test3.txt")
-    # to retry if errors occured  if ends are not compatible      
-    except TypeError or ValueError:
-        print("try again STICKY ENDS are not compaible!!!!!")
-        cloning(sequence)
+    answer = int(input("Sub cloning or homolgy(1 or 2): "))
+    if answer == 1:
+        """Restriction cloning by restriction digestion and ligation"""
+        #vector_path = input("file name: ")
+        vector =  read("puc.gb")
+        cutters = []
+        # once cutters in vector
+        for cutter in vector.n_cutters(n=1):
+            cutters.append(cutter)
+        print(f" one cutters with sticky ends: {cutters}")
+        #user must choose an enzyme to linearize the vector
+        main_Q = input("write name of the enzyme to linearize the vector: ")
+        enzyme = RestrictionBatch([main_Q])
+        for a in enzyme:
+            linear_vector  = vector.linearize(a)
+        # makes a map of enzymes 
+        enzyme_map(sequence)
+        # making pcr
+        prod=make_pcr(sequence)
+        sec_q= input("name of the enzyme that cuts the insert: ")
+        enzyme2 = RestrictionBatch([sec_q])
+        for a in enzyme2:
+            stuffer1, insert, stuffer2 = prod.cut(a)    
+        # then we assemble all together 
+        # recombined product is saved in txt file 
+        try:
+            Recomb = (linear_vector+insert).looped()  
+            Recomb.write("test3.txt")
+        # to retry if errors occured  if ends are not compatible      
+        except TypeError or ValueError:
+            print("try again STICKY ENDS are not compaible!!!!!")
+            cloning(sequence)
+    elif answer == 2:
+        """Cloning by homologous recombination"""
+        #vector_path = input("file name: ")
+        vector =  read("sequence.gb")
+        cutters = []
+        # once cutters in vector
+        for cutter in vector.twice_cutters():
+            cutters.append((cutter,cutter.site))
+        print(f" twice cutters with sticky ends: {cutters}")
+        #user must choose an enzyme to linearize the vector
+        main_Q = input("write name of the enzyme to linearize the vector: ")
+        enzyme = RestrictionBatch([main_Q])
+        for a in enzyme:
+            linear_vector, homologous   = vector.cut(a)                
+        # makes a map of enzyme
+        enzyme_map(sequence)
+        # making pcr
+        prod=make_pcr(sequence)
+        sequence=Dseqrecord(sequence)
+        try:
+            asm= Assembly((linear_vector,prod))
+            Recomb =asm.assemble_circular()
+            print(Recomb)
+            #Recomb.write("test4.txt")
+        # to retry if errors occured  if ends are not compatible      
+        except TypeError or ValueError:
+            print("try again !!!!!")
+            cloning(sequence)
+        # NOTE there will be further updates
