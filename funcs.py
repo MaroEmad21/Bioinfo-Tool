@@ -394,8 +394,8 @@ stop(x)
                 answer = Analog.with_site_size(N)
             elif ask.lower() == "x":
                 break
-            Analog.print_that(answer)
             Analog.print_as("map")
+            Analog.print_that(answer)
             # saves it in a file of text format
             test = open("map.txt",'w')
             test.write(str(Analog.format_output(answer)))
@@ -498,12 +498,10 @@ def Orf(sequence):
     return proteins
 """  And now it's to for making the cloning Function.
 Since Most plasmids are 
-
-
 """    
 def cloning(sequence):
-    answer = int(input("Sub cloning or homolgy(1 or 2): "))
-    if answer == 1:
+    #answer = int(input("Sub cloning or homolgy(1 or 2): "))
+    #if answer == 1:
         """Restriction cloning by restriction digestion and ligation"""
         #vector_path = input("file name: ")
         vector =  read("puc.gb")
@@ -534,9 +532,10 @@ def cloning(sequence):
         except TypeError or ValueError:
             print("try again STICKY ENDS are not compaible!!!!!")
             cloning(sequence)
-    elif answer == 2:
-        """Cloning by homologous recombination"""
-        #vector_path = input("file name: ")
+    # will be updated later
+        """elif answer == 2:
+        """"""Cloning by homologous recombination"""
+"""        #vector_path = input("file name: ")
         vector =  read("sequence.gb")
         cutters = []
         # once cutters in vector
@@ -547,14 +546,15 @@ def cloning(sequence):
         main_Q = input("write name of the enzyme to linearize the vector: ")
         enzyme = RestrictionBatch([main_Q])
         for a in enzyme:
-            linear_vector, homologous   = vector.cut(a)                
-        # makes a map of enzyme
-        enzyme_map(sequence)
-        # making pcr
-        prod=make_pcr(sequence)
-        sequence=Dseqrecord(sequence)
+            linear_vector, homologous   = vector.cut(a)
+
+        fp = Primer(linear_vector.seq[:-(len(linear_vector)-14)])
+        rp = Primer(homologous.seq[:14])        
+        amplicon=primer_designer(fp+ sequence+rp.reverse_complement())
+        prod= pcr(amplicon)
+
         try:
-            asm= Assembly((linear_vector,prod))
+            asm= Assembly((linear_vector,prod),14)
             Recomb =asm.assemble_circular()
             print(Recomb)
             #Recomb.write("test4.txt")
@@ -562,4 +562,9 @@ def cloning(sequence):
         except TypeError or ValueError:
             print("try again !!!!!")
             cloning(sequence)
-        # NOTE there will be further updates
+        # NOTE there will be further updates"""
+
+
+# assembly maker
+def make_assembly(sequence):
+    print("testtttt")
