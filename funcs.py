@@ -540,19 +540,24 @@ def cloning(sequence):
         #vector_path = input("file name: ")
         vector =  read("sequence.gb")
         cutters = []
-        # once cutters in vector
+        # enzyme map for the vector
         enzyme_map(vector.seq)
-        #user must choose an enzyme to linearize the vector
+        #user must choose an enzyme to cut the vector
         main_Q = input("write name of the enzyme to remove  the part from vector: ")
         enzyme= RestrictionBatch([main_Q])
         for a in enzyme:
+            # remove the neede part to separate
             rOF_vector, homologous   = vector.cut(a)
+        #search for the zero cutter in sequence
         enzyme_map(sequence)
-        sec_q= input("name of the enzyme that cuts the insert: ")
+        # add the site of 
+        sec_q= input("name of the enzyme that will be added: ")
         enzyme2 = RestrictionBatch([sec_q])
         for a in enzyme2:
             site = Dseqrecord(a.site) 
+        """ site is added to ensure assembly and to be used in gel"""    
         seq_amp = primer_design(Dseqrecord(sequence))
+        #assemble every thing together 
         fragment_list=assembly_fragments((rOF_vector,site,seq_amp,rOF_vector))
         fragment_list=fragment_list[:-1]
         try:
@@ -568,4 +573,6 @@ def cloning(sequence):
 
 # assembly maker
 def make_assembly(sequence):
-    print("testtttt")
+    """ Gibson assembly"""
+    #vector_path = input("file name of vector: ")
+    vector =  read("vector.gb")

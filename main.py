@@ -19,7 +19,8 @@ answer = input(
 (Rna or 2)  
 (enzyme map or 3) 
 (Pcr or 4 )  
-(Cloning  or 5) """)
+(Cloning  or 5) 
+(assembly or 6) """)
 
 if answer.upper() in ["DNA","1"]:
     parse_or_seq = input("file or seq: ")
@@ -238,7 +239,11 @@ elif answer.upper() in ["pcr","4"]:
 elif answer.upper() in ["cloning","5"]: 
     #file_path= input("file name: ")
     seq = read("newseq.gb").seq
-    cloning(seq)    
+    cloning(seq)
+elif answer.upper() in ["assembly","6"]: 
+    #file_path= input("file name: ")
+    seq = read("new.gb").seq
+    make_assembly(seq)        
 else:
     pass        
 
