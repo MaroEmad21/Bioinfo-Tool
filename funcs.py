@@ -22,6 +22,7 @@ from pydna.design import primer_design
 from pydna.amplify import pcr,Anneal
 from pydna.primer import Primer
 from pydna.assembly import Assembly
+from pydna.design import assembly_fragments
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 from pydna.utils import rc
@@ -394,7 +395,8 @@ stop(x)
                 answer = Analog.with_site_size(N)
             elif ask.lower() == "x":
                 break
-            Analog.print_as("map")
+            #type= input("fromat type: ")
+            Analog.print_as("list")
             Analog.print_that(answer)
             # saves it in a file of text format
             test = open("map.txt",'w')
@@ -500,8 +502,8 @@ def Orf(sequence):
 Since Most plasmids are 
 """    
 def cloning(sequence):
-    #answer = int(input("Sub cloning or homolgy(1 or 2): "))
-    #if answer == 1:
+    answer = int(input("Sub cloning or homolgy(1 or 2): "))
+    if answer == 1:
         """Restriction cloning by restriction digestion and ligation"""
         #vector_path = input("file name: ")
         vector =  read("puc.gb")
@@ -533,37 +535,36 @@ def cloning(sequence):
             print("try again STICKY ENDS are not compaible!!!!!")
             cloning(sequence)
     # will be updated later
-        """elif answer == 2:
-        """"""Cloning by homologous recombination"""
-"""        #vector_path = input("file name: ")
+    elif answer == 2:
+        """Cloning by homologous recombination"""
+        #vector_path = input("file name: ")
         vector =  read("sequence.gb")
         cutters = []
         # once cutters in vector
-        for cutter in vector.twice_cutters():
-            cutters.append((cutter,cutter.site))
-        print(f" twice cutters with sticky ends: {cutters}")
+        enzyme_map(vector.seq)
         #user must choose an enzyme to linearize the vector
-        main_Q = input("write name of the enzyme to linearize the vector: ")
-        enzyme = RestrictionBatch([main_Q])
+        main_Q = input("write name of the enzyme to remove  the part from vector: ")
+        enzyme= RestrictionBatch([main_Q])
         for a in enzyme:
-            linear_vector, homologous   = vector.cut(a)
-
-        fp = Primer(linear_vector.seq[:-(len(linear_vector)-14)])
-        rp = Primer(homologous.seq[:14])        
-        amplicon=primer_designer(fp+ sequence+rp.reverse_complement())
-        prod= pcr(amplicon)
-
+            rOF_vector, homologous   = vector.cut(a)
+        enzyme_map(sequence)
+        sec_q= input("name of the enzyme that cuts the insert: ")
+        enzyme2 = RestrictionBatch([sec_q])
+        for a in enzyme2:
+            site = Dseqrecord(a.site) 
+        seq_amp = primer_design(Dseqrecord(sequence))
+        fragment_list=assembly_fragments((rOF_vector,site,seq_amp,rOF_vector))
+        fragment_list=fragment_list[:-1]
         try:
-            asm= Assembly((linear_vector,prod),14)
-            Recomb =asm.assemble_circular()
+            asm= Assembly(fragment_list)
+            Recomb =asm.assemble_circular()[0]
             print(Recomb)
-            #Recomb.write("test4.txt")
+            Recomb.write("test4.txt")
         # to retry if errors occured  if ends are not compatible      
         except TypeError or ValueError:
             print("try again !!!!!")
             cloning(sequence)
-        # NOTE there will be further updates"""
-
+        # NOTE there will be further updates
 
 # assembly maker
 def make_assembly(sequence):
