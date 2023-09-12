@@ -242,7 +242,7 @@ elif answer.upper() in ["cloning","5"]:
     cloning(seq)
 elif answer.upper() in ["assembly","6"]: 
     #file_path= input("file name: ")
-    seq = read("new.gb").seq
+    seq = Dseqrecord(read("new.gb").seq)
     make_assembly(seq)        
 else:
     pass        

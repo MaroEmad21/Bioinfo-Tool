@@ -576,3 +576,54 @@ def make_assembly(sequence):
     """ Gibson assembly"""
     #vector_path = input("file name of vector: ")
     vector =  read("vector.gb")
+    vector = vector.looped()
+    cutters = []
+    # once cutters in vector
+    for cutter in vector.once_cutters():
+        cutters.append(cutter)
+    print(f" once cutters: {cutters}")
+    #user must choose an enzyme to linearize the vector
+    main_Q = input("write name of the enzyme to linearize the vector: ")
+    enzyme = RestrictionBatch([main_Q])
+    for a in enzyme:
+        linear_vector  = vector.linearize(a)
+    #other_sec_path = input("file name of other sequence: ")
+    other_seq= read("GFP.gb")
+    print(other_seq.list_features())
+    # n= int(input("no. of the feature to be extracted and replaced"))
+    feature = other_seq.extract_feature(5)
+    # to debug if the right feature
+    print(feature.isorf())
+    #make primer for the sequence
+    seq_amplicon = primer_design(sequence)
+    #show the figure
+    print(seq_amplicon.figure())
+    feature_amplicon = primer_design(feature)
+    print(feature_amplicon.figure())
+
+    #add all sequences together
+    fragments = (linear_vector,seq_amplicon,feature_amplicon,linear_vector)
+    # check for zero cutters in all fagments
+    no_cutters=[]
+    C_contain=RestrictionBatch([],['X','B','I'])
+    for enzyme in C_contain:
+        if not any( x.cut(enzyme) for x in fragments ):
+            no_cutters.append(enzyme)
+        else:
+            continue
+    print(no_cutters)        
+    #add this site to be used later in gel
+    sec_q= input("name of the enzyme that will be added: ")
+    enzyme2 = RestrictionBatch([sec_q])
+    for a in enzyme2:
+        site = Dseqrecord(a.site) 
+
+    fragments = (linear_vector,site,seq_amplicon,feature_amplicon,linear_vector)
+    # assemble them all 
+    fragment_list= assembly_fragments(fragments)
+    fragment_list=fragment_list[:-1]
+    # assembly
+    asm=Assembly(fragment_list)
+    assembeled= asm.assemble_circular()
+    print(assembeled[0].figure())
+    assembeled[0].write("test5.txt")
