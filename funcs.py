@@ -23,6 +23,7 @@ from pydna.amplify import pcr,Anneal
 from pydna.primer import Primer
 from pydna.assembly import Assembly
 from pydna.design import assembly_fragments
+from pydna.amplicon import Amplicon
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 from pydna.utils import rc
@@ -539,7 +540,6 @@ def cloning(sequence):
         """Cloning by homologous recombination"""
         #vector_path = input("file name: ")
         vector =  read("sequence.gb")
-        cutters = []
         # enzyme map for the vector
         enzyme_map(vector.seq)
         #user must choose an enzyme to cut the vector
@@ -576,7 +576,10 @@ def make_assembly(sequence):
     """ Gibson assembly"""
     #vector_path = input("file name of vector: ")
     vector =  read("vector.gb")
-    vector = vector.looped()
+    if (vector.linear) == True:
+        vector = vector.looped()
+    else:
+        pass
     cutters = []
     # once cutters in vector
     for cutter in vector.once_cutters():
@@ -627,3 +630,57 @@ def make_assembly(sequence):
     assembeled= asm.assemble_circular()
     print(assembeled[0].figure())
     assembeled[0].write("test5.txt")
+
+
+Nucleotides= ["A","C","G","T"]
+
+linkers=''.join([random.choice(Nucleotides)
+                                for nuc in range(4)])
+
+def golden_gate(sequence):
+    """golden gate assembly"""
+    #vector_path = input("file name of vector: ")
+    vector =  read("vector.gb")
+    if (vector.linear) == True:
+        vector = vector.looped()
+    else:
+        pass
+    cutters = []
+    #twice cutters in vector
+    for cutter in vector.twice_cutters():
+        cutters.append((cutter,cutter.site))
+    print(f"twice cutters: {cutters}")
+    #user must choose an enzyme to linearize the vector
+    main_Q = input("write name of the enzyme to linearize the vector: ")
+    enzyme = RestrictionBatch([main_Q])
+    for a in enzyme:
+        enz = a
+        # remove the neede part to separate
+        rOF_vector, homologous   = vector.cut(a)
+    #other_sec_path = input("file name of other sequence: ")
+    other_seq= read("sequence.fasta")    
+    #make primer for the sequence
+    seq_amplicon = primer_design(sequence)
+    #show the figure
+    print(seq_amplicon.figure())
+    new_amplicon= primer_design(other_seq)
+    """#add site to help in assembly of the fragments
+    sec_q= input("name of the enzyme that will be added: ")"""
+    site = enz.site
+    #add all to the primers
+    for i in (seq_amplicon,new_amplicon):
+        i.forward_primer = site  + "A" + linkers + i.forward_primer
+        i.reverse_primer = site  + "A" + linkers + i.reverse_primer
+    # make pcr for both sequences
+    seq_amplicon = pcr(seq_amplicon.forward_primer,seq_amplicon.reverse_primer,seq_amplicon.template)
+    print(seq_amplicon.figure())
+    new_amplicon = pcr(new_amplicon.forward_primer,new_amplicon.reverse_primer,new_amplicon.template)
+    print(new_amplicon.figure())
+    # cut both with the enzyme
+    none,seq_amplicon,none = seq_amplicon.seq.cut(enz)
+    none,new_amplicon,none = new_amplicon.seq.cut(enz)
+    seq_amplicon = Amplicon(seq_amplicon)
+    new_amplicon = Amplicon(new_amplicon)
+    print(seq_amplicon)
+    #add them all together
+    fragments_list = assembly_fragments((rOF_vector,seq_amplicon,new_amplicon,rOF_vector))
