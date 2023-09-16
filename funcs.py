@@ -9,6 +9,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
 from Bio.Align import  MultipleSeqAlignment , PairwiseAligner
 from Bio.Data.CodonTable import TranslationError
+from Bio.Restriction import CommOnly,AllEnzymes
 import glob
 import random
 from pydna.readers import read
@@ -20,6 +21,7 @@ from pydna.ladders import GeneRuler_1kb
 from pydna.dseqrecord import Dseqrecord
 from pydna.design import primer_design
 from pydna.amplify import pcr,Anneal
+from pydna.common_sub_strings import terminal_overlap
 from pydna.primer import Primer
 from pydna.assembly import Assembly
 from pydna.design import assembly_fragments
@@ -358,7 +360,7 @@ def new_translate(seq):
 def enzyme_map(sequence):
     # here it maps all the enzymes that cuts the sequence
     C_contain=RestrictionBatch([],['X','B','I'])
-    Analog= Analysis(C_contain,sequence,False)
+    Analog= Analysis(AllEnzymes,sequence,False)
     # different types of cuts  
     # loop to allow different times 
     while True:
@@ -637,7 +639,11 @@ Nucleotides= ["A","C","G","T"]
 linkers=''.join([random.choice(Nucleotides)
                                 for nuc in range(4)])
 
+
+
+
 def golden_gate(sequence):
+    
     """golden gate assembly"""
     #vector_path = input("file name of vector: ")
     vector =  read("vector.gb")
@@ -645,18 +651,19 @@ def golden_gate(sequence):
         vector = vector.looped()
     else:
         pass
-    cutters = []
-    #twice cutters in vector
-    for cutter in vector.twice_cutters():
-        cutters.append((cutter,cutter.site))
-    print(f"twice cutters: {cutters}")
+    enzyme_map(vector.seq)
     #user must choose an enzyme to linearize the vector
     main_Q = input("write name of the enzyme to linearize the vector: ")
     enzyme = RestrictionBatch([main_Q])
     for a in enzyme:
         enz = a
         # remove the neede part to separate
-        rOF_vector, homologous   = vector.cut(a)
+        vector1, vector2   = vector.cut(a)
+    if vector1 >vector2:
+        main_vector = vector1
+    else:
+        main_vector = vector2    
+
     #other_sec_path = input("file name of other sequence: ")
     other_seq= read("sequence.fasta")    
     #make primer for the sequence
@@ -664,23 +671,34 @@ def golden_gate(sequence):
     #show the figure
     print(seq_amplicon.figure())
     new_amplicon= primer_design(other_seq)
-    """#add site to help in assembly of the fragments
-    sec_q= input("name of the enzyme that will be added: ")"""
-    site = enz.site
-    #add all to the primers
     for i in (seq_amplicon,new_amplicon):
-        i.forward_primer = site  + "A" + linkers + i.forward_primer
-        i.reverse_primer = site  + "A" + linkers + i.reverse_primer
-    # make pcr for both sequences
+        i.forward_primer = enz.site + "A" + linkers + i.forward_primer 
+        i.reverse_primer = enz.site + "A"+ linkers + i.reverse_primer
+        i=primer_design(i,forward_primer=i.forward_primer,reverse_primer=i.reverse_primer)
+    
     seq_amplicon = pcr(seq_amplicon.forward_primer,seq_amplicon.reverse_primer,seq_amplicon.template)
-    print(seq_amplicon.figure())
     new_amplicon = pcr(new_amplicon.forward_primer,new_amplicon.reverse_primer,new_amplicon.template)
-    print(new_amplicon.figure())
+    
+    
+    
     # cut both with the enzyme
-    none,seq_amplicon,none = seq_amplicon.seq.cut(enz)
-    none,new_amplicon,none = new_amplicon.seq.cut(enz)
-    seq_amplicon = Amplicon(seq_amplicon)
-    new_amplicon = Amplicon(new_amplicon)
-    print(seq_amplicon)
+    none,seq_amplicon,none=seq_amplicon.cut(enz)
+    none,new_amplicon,none=new_amplicon.cut(enz)
     #add them all together
-    fragments_list = assembly_fragments((rOF_vector,seq_amplicon,new_amplicon,rOF_vector))
+    site = Dseqrecord(enz.site)
+    fragment_list = (main_vector,seq_amplicon,new_amplicon,main_vector).looped().synced(main_vector)
+    try:
+        asm= Assembly(fragment_list,algorithm=terminal_overlap)
+        Recomb =asm.assemble_circular()
+        print(Recomb)
+        #Recomb.write("test4.txt")
+    # to retry if errors occured  if ends are not compatible      
+    except TypeError or ValueError:
+        print("try again !!!!!")
+        golden_gate(sequence)
+    # NOTE there will be further updates
+
+
+
+
+
