@@ -34,7 +34,7 @@ if answer.upper() in ["DNA","1"]:
             ids = record.id
             print(f"id = {record.description} \n your sequence is: {seq}")
     else:
-        print("Choose well")    
+        raise ValueError("Please Pick from the Choices!!")    
     # this loops to get more info from the same file
     while True:
         next_step = input(
@@ -129,7 +129,7 @@ elif answer.upper() in ["rna","2"]:
             ids = record.id
             print(f"id = {record.description} \n your sequence is: {seq}")
     else:
-        print("Choose well")    
+        raise ValueError("Please Pick from the Choices!!")    
     # this loops to get more info from the same file
     while True:
         next_step = input(
@@ -219,7 +219,7 @@ elif answer.upper() in ["enz","3"]:
             ids = record.id
             #print(f"your sequence is: {seq}")
     else:
-        print("Choose well")
+        raise ValueError("Please Pick from the Choices!!")
     enzyme_map(seq)
 #assemply and Pcr    
 elif answer.upper() in ["pcr","4"]:
@@ -234,7 +234,7 @@ elif answer.upper() in ["pcr","4"]:
             ids = record.id
             #print(f"your sequence is: {seq}")
     else:
-        print("Choose well")
+        raise ValueError("Please Pick from the Choices!!")
     make_pcr(seq)
 elif answer.upper() in ["cloning","5"]: 
     #file_path= input("file name: ")
@@ -243,18 +243,23 @@ elif answer.upper() in ["cloning","5"]:
 elif answer.upper() in ["assembly","6"]: 
     #file_path= input("file name: ")
     seq = Dseqrecord(read("new.gb").seq)
-    #make_assembly(seq)        
-    #golden_gate(seq)
-    # Example usage
-    vector_file = "vector.gb"
-    insert_files = ["newseq.gb", "new.gb"]
+    answer  = int(input("Gibson assembly or Golden Gate(1 or 2): "))
+    if answer == 1:    
+        make_assembly(seq)        
+    elif answer == 2:    
+        GoldenGateAssembly.golden_gate(seq)
+        # Example usage
+        vector_file = "vector.gb"
+        insert_files = ["newseq.gb", "new.gb"]
 
-    assembly = GoldenGateAssembly(vector_file, insert_files)
-    recombined_vector = assembly.main()
-    print(recombined_vector)
-
+        assembly = GoldenGateAssembly(vector_file, insert_files)
+        recombined_vector = assembly.main()
+        print(recombined_vector)
+    else:
+        raise ValueError("write the number 1 or 2!!!")
+    
 else:    
-    pass        
+    raise ValueError("Please Pick from the Choices!!")        
 
 
 
