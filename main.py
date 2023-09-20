@@ -244,8 +244,16 @@ elif answer.upper() in ["assembly","6"]:
     #file_path= input("file name: ")
     seq = Dseqrecord(read("new.gb").seq)
     #make_assembly(seq)        
-    golden_gate(seq)
-else:
+    #golden_gate(seq)
+    # Example usage
+    vector_file = "vector.gb"
+    insert_files = ["newseq.gb", "new.gb"]
+
+    assembly = GoldenGateAssembly(vector_file, insert_files)
+    recombined_vector = assembly.main()
+    print(recombined_vector)
+
+else:    
     pass        
 
 
