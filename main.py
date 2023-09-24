@@ -238,8 +238,11 @@ elif answer.upper() in ["pcr","4"]:
     make_pcr(seq)
 elif answer.upper() in ["cloning","5"]: 
     #file_path= input("file name: ")
-    seq = read("newseq.gb").seq
-    cloning(seq)
+    seq = read("new.gb")
+    #cloning(seq)
+    enzyme_map(seq.seq)
+    test = Gel(seq,["EcoRI","EcoRV","BmeRI","XmiI"])
+    test.make_gel()
 elif answer.upper() in ["assembly","6"]: 
     #file_path= input("file name: ")
     seq = Dseqrecord(read("new.gb").seq)
@@ -251,7 +254,6 @@ elif answer.upper() in ["assembly","6"]:
         # Example usage
         vector_file = "vector.gb"
         insert_files = ["newseq.gb", "new.gb"]
-
         assembly = GoldenGateAssembly(vector_file, insert_files)
         recombined_vector = assembly.main()
         print(recombined_vector)

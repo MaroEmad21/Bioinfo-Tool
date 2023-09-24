@@ -17,7 +17,7 @@ from primer3 import calc_tm ,calc_hairpin
 from Bio.Restriction import Analysis
 from Bio.Restriction.Restriction import RestrictionBatch
 from pydna.gel import gel
-from pydna.ladders import GeneRuler_1kb
+from pydna.ladders import GeneRuler_1kb, PennStateLadder
 from pydna.dseqrecord import Dseqrecord
 from pydna.design import primer_design
 from pydna.amplify import pcr,Anneal
@@ -407,45 +407,6 @@ stop(x)
             test = open("map.txt",'w')
             test.write(str(Analog.format_output(answer)))
             test.close()
-    #this will be made later
-    """ # testing making a draw
-    gd_diagram = GenomeDiagram.Diagram(id)
-    gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
-    gd_feature_set = gd_track_for_features.new_set()
-    for enzyme in C_contain:
-        for site, name, color in [
-        (enzyme.site,str(enzyme),colors.lightsteelblue)
-        ]:
-            index = 0
-            while True:
-                index = sequence.find(site, start=index)
-                if index == -1:
-                    break
-                feature = SeqFeature(SimpleLocation(index, index + len(site)))
-                gd_feature_set.add_feature(
-                feature,
-                color=color,
-                name=name,
-                label=True,
-                label_size=10,
-
-
-)
-                index += len(site)
-                gd_diagram.draw(
-                            format="circular",
-                            circular=True,
-                            pagesize=(40 * cm, 40 * cm),
-                            start=0,
-                            end=len(sequence),
-                            circle_core=0.5,
-
-)
-
-                #feature = SeqFeature(SimpleLocation(index_of_M(sequence),index+len(sequence)),type="ORF").translate(sequence,start_offset=1,to_stop=True,)
-                #gd_feature_set.add_feature(feature, sigil="ARROW", color="blue", arrowhead_length=0.25)
-                #gd_diagram.write("test.pdf", "Pdf",dpi=300)
-"""
 
 
 
@@ -496,6 +457,7 @@ def make_pcr(sequence):
     else:
         raise ValueError("please on only choose y or n")
 
+# new open reading frame reader
 def Orf(sequence):
     proteins = []
     i=1
@@ -503,6 +465,9 @@ def Orf(sequence):
         proteins.append(f"protein no. {i}: {orf.translate().seq}")
         i+=1
     return proteins
+
+
+
 """  And now it's to for making the cloning Function.
 Since Most plasmids are
 """
@@ -809,3 +774,28 @@ class GoldenGateAssembly:
                 print("try again !!!!!")
                 golden_gate(sequence)
             # NOTE there will be further updates
+
+# Create the Gel class
+class Gel:
+    def __init__(self,sequence,enzymes):
+        self.sequence = sequence
+        self.enzymes = enzymes
+    
+    
+    def make_gel(self):
+        # Create a RestrictionBatch object and add the enzymes to it
+        test= RestrictionBatch([])
+        for i in self.enzymes:
+            test.add(i)
+        enzymes = []
+        for a in test:
+            enzymes.append(a)
+        print(enzymes)    
+        cuts = [GeneRuler_1kb]
+        test=[]
+        for enzyme in enzymes:
+            cut = list(self.sequence.cut(enzyme))
+            cuts.append(cut)
+        print(cuts)    
+        image =gel(cuts,margin=10)
+        image.save("test.png", "PNG")
