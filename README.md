@@ -1,4 +1,4 @@
-# Bioinformatics Tool
+# LinoGene
 making Bioinformatics application using Biopython that can do several things as gene expression, Alignment, Phylogenetic tree...etc  
 
 
