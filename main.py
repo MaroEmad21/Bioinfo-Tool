@@ -8,7 +8,8 @@ from Bio import SeqIO
 from Bio.Seq import Seq 
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
-from funcs import *   # to use functions made that not exist in Biopython
+# to use functions made that not exist in Biopython
+from funcs import *   
 
 
 
@@ -20,21 +21,17 @@ answer = input(
 (enzyme map or 3) 
 (Pcr or 4 )  
 (Cloning  or 5) 
-(assembly or 6) """)
+(assembly or 6) 
+(Gel electrophoresis or 7) """)
 
 if answer.upper() in ["DNA","1"]:
-    parse_or_seq = input("file or seq: ")
-    """user enters file path and file type manually but used once
-                    (will be updated)""" 
-    if parse_or_seq.lower() in ["file","1"]:
-        #file_path= input("file name: ")
-        #file_type= input("file type: ")
-        for record in read(f"sequence.fasta", "fasta"):
-            seq = record.seq
-            ids = record.id
-            print(f"id = {record.description} \n your sequence is: {seq}")
-    else:
-        raise ValueError("Please Pick from the Choices!!")    
+    file_path= input("file name: ")
+    file_type= input("file type: ")
+    for record in read(f"{file_path}", f"{file_type}"):
+        seq = record.seq
+        ids = record.id
+        print(f"id = {record.description} \n your sequence is: {seq}")
+
     # this loops to get more info from the same file
     while True:
         next_step = input(
@@ -49,7 +46,7 @@ if answer.upper() in ["DNA","1"]:
     8)six frame translation
     9)Alignment
     10)phylognetic tree
-    11) Primer
+    11) Primer_designer
     __stop or x:  """)
         # Back transcription
         if next_step.lower() in  ['transcribe' ,'1']:
@@ -118,18 +115,12 @@ if answer.upper() in ["DNA","1"]:
     """
 
 elif answer.upper() in ["rna","2"]:
-    parse_or_seq = input("file or seq: ")
-    """user enters file path and file type manually but used once
-                    (will be updated)""" 
-    if parse_or_seq.lower() in ["file","1"]:
-        #file_path= input("file name: ")
-        #file_type= input("file type: ")
-        for record in SeqIO.parse(f"newseq.fasta", "fasta"):
-            seq = record.seq
-            ids = record.id
-            print(f"id = {record.description} \n your sequence is: {seq}")
-    else:
-        raise ValueError("Please Pick from the Choices!!")    
+    file_path= input("file name: ")
+    file_type= input("file type: ")
+    for record in SeqIO.parse(f"{file_path}", f"{file_type}"):
+        seq = record.seq
+        ids = record.id
+        print(f"id = {record.description} \n your sequence is: {seq}")
     # this loops to get more info from the same file
     while True:
         next_step = input(
@@ -144,7 +135,7 @@ elif answer.upper() in ["rna","2"]:
     8)six frame translation
     9)Alignment
     10)phylognetic tree
-    11) Primer
+    11) Primer_designer
     __stop or x:  """)
         # Back transcription
         if next_step.lower() in  ['transcribe' ,'1']:
@@ -206,60 +197,108 @@ elif answer.upper() in ["rna","2"]:
         # to break the loop   
         elif next_step.lower() in  ['stop' ,'x']:
             break
+
+
+
 # this to ask if making enzyme map        
 elif answer.upper() in ["enz","3"]:
-    parse_or_seq = input("file or seq: ")
-    """user enters file path and file type manually but used once
-                    (will be updated)""" 
-    if parse_or_seq.lower() in ["file","1"]:
-        #file_path= input("file name: ")
-        #file_type= input("file type: ")
-        for record in SeqIO.parse(f"sequence.fasta", "fasta"):
-            seq = record.seq
-            ids = record.id
-            #print(f"your sequence is: {seq}")
-    else:
-        raise ValueError("Please Pick from the Choices!!")
+    file_path= input("file name: ")
+    file_type= input("file type: ")
+    for record in SeqIO.parse(f"{file_path}", f"{file_type}"):
+        seq = record.seq
+        ids = record.id
+        print(f"your sequence is: {seq}")
     enzyme_map(seq)
-#assemply and Pcr    
+
+
+ 
+# Pcr Product
 elif answer.upper() in ["pcr","4"]:
-    parse_or_seq = input("file or seq: ")
-    """user enters file path and file type manually but used once
-                    (will be updated)""" 
-    if parse_or_seq.lower() in ["file","1"]:
-        #file_path= input("file name: ")
-        #file_type= input("file type: ")
-        for record in SeqIO.parse(f"sequence.fasta", "fasta"):
-            seq = record.seq
-            ids = record.id
-            #print(f"your sequence is: {seq}")
-    else:
-        raise ValueError("Please Pick from the Choices!!")
+    file_path= input("file name: ")
+    file_type= input("file type: ")
+    for record in SeqIO.parse(f"{file_path}", f"{file_type}"):
+        seq = record.seq
+        ids = record.id
+        print(f"your sequence is: {seq}")
     make_pcr(seq)
+
+
+#Cloning maker
 elif answer.upper() in ["cloning","5"]: 
-    #file_path= input("file name: ")
-    seq = read("new.gb")
-    #cloning(seq)
-    enzyme_map(seq.seq)
-    test = Gel(seq,["EcoRI","EcoRV","BmeRI","XmiI"])
-    test.make_gel()
+    file_path= input("file name: ")
+    seq = read(f"{file_path}")
+    cloning(seq)
+    answer = input("Do you want to make Gel elctrophoresis(y or n):")
+    if answer.lower() == "y":
+        names = int(input("Number of enzymes used for gel"))
+        enymes= []
+        i = 0
+        for i in range(i,names):
+            enzyme = input("ENTER ENZYME NAME: ")
+            enymes.append(enzyme)
+        test = Gel(seq,enzymes=enymes)
+        test.make_gel()
+    elif answer.lower() == "n":
+        pass    
+
+# Here 2 types or 2 algorithms of assembly
 elif answer.upper() in ["assembly","6"]: 
-    #file_path= input("file name: ")
-    seq = Dseqrecord(read("new.gb").seq)
+    file_path= input("file name: ")
+    seq = Dseqrecord(read(f"{file_path}").seq)
     answer  = int(input("Gibson assembly or Golden Gate(1 or 2): "))
     if answer == 1:    
-        make_assembly(seq)        
+        make_assembly(seq)
+        answer = input("Do you want to make Gel elctrophoresis(y or n):")
+    if answer.lower() == "y":
+        names = int(input("Number of enzymes used for gel"))
+        enymes= []
+        i = 0
+        for i in range(i,names):
+            enzyme = input("ENTER ENZYME NAME: ")
+            enymes.append(enzyme)
+        test = Gel(seq,enzymes=enymes)
+        test.make_gel()
+    elif answer.lower() == "n":
+        pass    
     elif answer == 2:    
         GoldenGateAssembly.golden_gate(seq)
         # Example usage
-        vector_file = "vector.gb"
-        insert_files = ["newseq.gb", "new.gb"]
+        vector_path = input("ENTER FILE PATH:")
+        vector_file = f"{vector_path}"
+        n = int(input("ENTER NUMBER OF FILES WILL BE USED"))
+        insert_files = []
+        for i in n:
+            file = input("ENTER FILE NAME: ")
+            insert_files.append(file)
         assembly = GoldenGateAssembly(vector_file, insert_files)
         recombined_vector = assembly.main()
         print(recombined_vector)
+        answer = input("Do you want to make Gel elctrophoresis(y or n):")
+    if answer.lower() == "y":
+        names = int(input("Number of enzymes used for gel"))
+        enymes= []
+        i = 0
+        for i in range(i,names):
+            enzyme = input("ENTER ENZYME NAME: ")
+            enymes.append(enzyme)
+        test = Gel(seq,enzymes=enymes)
+        test.make_gel()
+    elif answer.lower() == "n":
+        pass    
     else:
         raise ValueError("write the number 1 or 2!!!")
-    
+elif answer.upper() in ["Gel","7"]: 
+    file_path= input("file name: ")
+    seq = read(f"{file_path}")
+    enzyme_map(seq.seq)
+    names = int(input("Number of enzymes used for gel"))
+    enymes= []
+    i = 0
+    for i in range(i,names):
+        enzyme = input("ENTER ENZYME NAME: ")
+        enymes.append(enzyme)
+    test = Gel(seq,enzymes=enymes)
+    test.make_gel()
 else:    
     raise ValueError("Please Pick from the Choices!!")        
 

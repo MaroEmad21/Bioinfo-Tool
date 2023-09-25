@@ -9,7 +9,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
 from Bio.Align import  MultipleSeqAlignment , PairwiseAligner
 from Bio.Data.CodonTable import TranslationError
-from Bio.Restriction import CommOnly,AllEnzymes
+from Bio.Restriction import AllEnzymes
 import glob
 import random
 from pydna.readers import read
@@ -17,7 +17,7 @@ from primer3 import calc_tm ,calc_hairpin
 from Bio.Restriction import Analysis
 from Bio.Restriction.Restriction import RestrictionBatch
 from pydna.gel import gel
-from pydna.ladders import GeneRuler_1kb, PennStateLadder
+from pydna.ladders import GeneRuler_1kb
 from pydna.dseqrecord import Dseqrecord
 from pydna.design import primer_design
 from pydna.amplify import pcr,Anneal
@@ -25,7 +25,6 @@ from pydna.common_sub_strings import terminal_overlap
 from pydna.primer import Primer
 from pydna.assembly import Assembly
 from pydna.design import assembly_fragments
-from pydna.amplicon import Amplicon
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 from pydna.utils import rc
