@@ -223,11 +223,14 @@ elif answer.upper() in ["pcr","4"]:
     make_pcr(seq)
 
 
+
 #Cloning maker
 elif answer.upper() in ["cloning","5"]: 
     file_path= input("file name: ")
     seq = read(f"{file_path}")
     cloning(seq)
+    print("please check this link to ensure the correctness of product: https://www.plasmapper.wishartlab.com/ ")
+
     answer = input("Do you want to make Gel elctrophoresis(y or n):")
     if answer.lower() == "y":
         names = int(input("Number of enzymes used for gel"))
@@ -243,11 +246,13 @@ elif answer.upper() in ["cloning","5"]:
 
 # Here 2 types or 2 algorithms of assembly
 elif answer.upper() in ["assembly","6"]: 
+    
     file_path= input("file name: ")
     seq = Dseqrecord(read(f"{file_path}").seq)
     answer  = int(input("Gibson assembly or Golden Gate(1 or 2): "))
     if answer == 1:    
         make_assembly(seq)
+        print("please check this link to ensure the correctness of product: https://www.plasmapper.wishartlab.com/ ")
         answer = input("Do you want to make Gel elctrophoresis(y or n):")
     if answer.lower() == "y":
         names = int(input("Number of enzymes used for gel"))
@@ -262,7 +267,8 @@ elif answer.upper() in ["assembly","6"]:
         pass    
     elif answer == 2:    
         print("""please note that there 2 algorithms used so there will be 2 products 
-              let me know which one works better!! (Beta program) """)
+              let me know which one works better!! (Beta program) 
+              use this link: https://www.plasmapper.wishartlab.com/ to check the product""")
         GoldenGateAssembly.golden_gate(seq)
         # Example usage
         vector_path = input("ENTER FILE PATH:")

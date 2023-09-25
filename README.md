@@ -1,12 +1,32 @@
-# LinoGene
-making Bioinformatics application using Biopython that can do several things as gene expression, Alignment, Phylogenetic tree...etc  
+# GeneXpert
 
+GeneXpert is a powerful and user-friendly bioinformatics tool that serves as an alternative to SnapGene. It allows researchers and scientists to analyze and manipulate genetic sequences with ease and for free.
 
-## How to use the app?
-> You input the file path and type that will be read to perform analysis on the     file,you will firstly pick which sequence type you use.
+## Features
 
-### Note: the choice called seq is for debugging only 
+- Sequence annotation and visualization
+- Primer design and PCR simulation
+- Plasmid mapping and restriction analysis
+- Sequence alignment and comparison
+- Gene cloning and virtual cloning simulations
 
+## Installation
 
-> Then you get to choose what to do next which loops in case user wants to make several actions at the same time 
->each action as transcribtion or translation for example saves the result in fasta file format, except for alignment it outputs an `.aln` fromat or clustal format
+1. Clone the repository: `git clone https://github.com/yourusername/GeneXpert.git`
+2. Install the necessary dependencies: `pip install -r requirements.txt`
+3. Launch the application: `main.exe`
+
+## Usage
+
+1. Open GeneXpert and import your genetic sequence file.
+2. Explore the various tools and features available.
+3. Analyze, manipulate, and visualize your genetic data.
+4. Export your results and share them with your colleagues.
+
+## Contributing
+
+We welcome contributions from the bioinformatics community. If you have any ideas, bug reports, or feature requests, please submit them through GitHub issues.
+
+## License
+
+SnapGenius is released under the MIT License. See the [LICENSE](LICENSE) file for more details.
