@@ -23,11 +23,11 @@ answer = input(
 (Cloning  or 5) 
 (assembly or 6) 
 (Gel electrophoresis or 7) """)
-
+print("KINDLY KNOW THAT THIS IS A BETA VERSION AND MORE UPDATES WILL COME")
 if answer.upper() in ["DNA","1"]:
     file_path= input("file name: ")
     file_type= input("file type: ")
-    for record in read(f"{file_path}", f"{file_type}"):
+    for record in SeqIO.parse(f"{file_path}", f"{file_type}"):
         seq = record.seq
         ids = record.id
         print(f"id = {record.description} \n your sequence is: {seq}")
@@ -43,7 +43,7 @@ if answer.upper() in ["DNA","1"]:
     5)reverse_complement_rna(5) 
     6)GC content(%) 
     7)Molecular weight(mw)
-    8)six frame translation
+    8) Open Reading frames
     9)Alignment
     10)phylognetic tree
     11) Primer_designer
@@ -132,7 +132,7 @@ elif answer.upper() in ["rna","2"]:
     5)reverse_complement_rna(5) 
     6)GC content(%) 
     7)Molecular weight(mw)
-    8)six frame translation
+    8) Open Reading frames
     9)Alignment
     10)phylognetic tree
     11) Primer_designer
@@ -261,6 +261,8 @@ elif answer.upper() in ["assembly","6"]:
     elif answer.lower() == "n":
         pass    
     elif answer == 2:    
+        print("""please note that there 2 algorithms used so there will be 2 products 
+              let me know which one works better!! (Beta program) """)
         GoldenGateAssembly.golden_gate(seq)
         # Example usage
         vector_path = input("ENTER FILE PATH:")
