@@ -5,7 +5,7 @@
     this is Version 2.0  
 """
 from Bio import SeqIO 
-from Bio.Seq import Seq 
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import *
 # to use functions made that not exist in Biopython

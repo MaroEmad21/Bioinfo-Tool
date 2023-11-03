@@ -10,11 +10,11 @@ GeneXpert is a powerful and user-friendly bioinformatics tool that serves as an 
 - Sequence alignment and comparison
 - Gene cloning and virtual cloning simulations
 
-## Installation
+## After-Installation
 
-1. Clone the repository: `git clone https://github.com/yourusername/GeneXpert.git`
-2. Install the necessary dependencies: `pip install -r requirements.txt`
-3. Launch the application: `main.exe`
+1. run Cmd using windows+R then write cmd.
+2. open the folder of installation and pick copypath.
+3. Launch the application `python GeneXpert.py`.
 
 ## Usage
 

@@ -2,7 +2,6 @@
 this file will contain all functions needed to be made for the tool that
 doesn't exist in libraries
 """
-from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
 from Bio import   SeqIO  ,Phylo
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -12,6 +11,7 @@ from Bio.Data.CodonTable import TranslationError
 from Bio.Restriction import AllEnzymes
 import glob
 import random
+from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
 from pydna.readers import read
 from primer3 import calc_tm ,calc_hairpin
 from Bio.Restriction import Analysis
@@ -25,8 +25,6 @@ from pydna.common_sub_strings import terminal_overlap
 from pydna.primer import Primer
 from pydna.assembly import Assembly
 from pydna.design import assembly_fragments
-from reportlab.lib import colors
-from reportlab.lib.units import cm
 from pydna.utils import rc
 from pydna.parsers import parse
 
