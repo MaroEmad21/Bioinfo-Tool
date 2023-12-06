@@ -1,9 +1,9 @@
-biopython                     1.81
-primer3-py                    2.0.0
-primerserver2                 2.0.0b19
-pydna                         5.2.0
-scikit-learn                  1.1.2
-scipy                         1.9.2
-ipython                       8.5.0
-ipython-genutils              0.2.0
-ipywidgets                    8.0.4
+biopython==1.81
+primer3-py==2.0.0
+primerserver2==2.0.0b19
+pydna==5.2.0
+scikit-learn==1.1.2
+scipy==1.9.2
+ipython==8.5.0
+ipython-genutils==0.2.0
+ipywidgets==8.0.4
