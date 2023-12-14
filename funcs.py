@@ -13,7 +13,7 @@ import glob
 import random
 from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
 from pydna.readers import read
-from primer3 import calc_tm ,calc_hairpin
+#from primer3_py import calc_tm ,calc_hairpin
 from Bio.Restriction import Analysis
 from Bio.Restriction.Restriction import RestrictionBatch
 from pydna.gel import gel
@@ -209,59 +209,6 @@ def make_phylo(seq,ids):
             print("wrong choice")
     else:
         print("choose well!!!!!")
-
-"""
-    Primer desgining that depends on the Restriction Enzyme
-    But till now it will generate random sequence with certain conditions
-"""
-#primer generator
-"""
-    Generates as random sequence that could be added to the sequence
-    as an extended part to clone th whole sequence
-    with properties of a good primer and not forming a hairpin structure
-"""
-def get_primer_seq(sequence,id):
-    Q1 = input("Primer Within sequence or out of sequences(1 or 2)? ")
-    if Q1 == "1":
-        print(Q1)
-    elif Q1 == "2":
-        size= int(input("size [18 : 24]"))
-        if size > 24 or size < 18:
-           print("this will be problem")
-        else:
-            Nucleotides= ["A","C","G","T"]
-            Forward=''.join([random.choice(Nucleotides)
-                                for nuc in range(size)])
-            reverse=''.join([random.choice(Nucleotides)
-                                for nuc in range(size)])
-        while True:
-            if round(gc_fraction(Forward)*100) in range(40,60) and round(calc_tm(Forward)) in range(50,60) and round(gc_fraction(reverse)*100) in range(40,60) and round(calc_tm(reverse)) in range(50,60) and str(calc_hairpin(Forward)) == "ThermoResult(structure_found=False, tm=0.00, dg=0.00, dh=0.00, ds=0.00)" and  str(calc_hairpin(reverse)) == "ThermoResult(structure_found=False, tm=0.00, dg=0.00, dh=0.00, ds=0.00)":
-                print(Forward)
-                print(round(gc_fraction(Forward)*100))
-                print(round(calc_tm(Forward)))
-                print(calc_hairpin(Forward))
-                print(reverse)
-                print(round(gc_fraction(reverse)*100))
-                print(round(calc_tm(reverse)))
-                print(calc_hairpin(reverse))
-                align= PairwiseAligner()
-                align.mode == "local"
-                print(align.align(Forward,reverse)[0])
-                #mainQ=input("do you want")
-                add_primer(sequence,Forward,reverse,id)
-                break
-            else:
-                Forward=''.join([random.choice(Nucleotides)
-                                for nuc in range(size)])
-                reverse=''.join([random.choice(Nucleotides)
-                                for nuc in range(size)])
-                continue
-    else :
-        raise ValueError("WRONG VALUE")
-
-
-
-
 
 #this function adds primer to the sequnece
 def add_primer(seq,forward,reverse,id):
@@ -796,3 +743,4 @@ class Gel:
         print(cuts)    
         image =gel(cuts,margin=10)
         image.save("test.png", "PNG")
+
